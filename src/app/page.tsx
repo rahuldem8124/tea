@@ -8,8 +8,6 @@ import { ProfitChart } from "@/components/dashboard/ProfitChart";
 import { kpiData, recentActivity, dailyChartData, alerts } from "@/lib/data";
 import {
   TrendingUp,
-  TrendingDown,
-  DollarSign,
   Leaf,
   Package,
   AlertCircle,
@@ -29,9 +27,6 @@ import { cn } from "@/lib/utils";
 import { ProcessPipeline } from "@/components/dashboard/ProcessPipeline";
 
 
-function formatCurrency(v: number) {
-  return `Rs. ${(v / 1000).toFixed(0)}K`;
-}
 
 export default function DashboardPage() {
   const [isAlertsOpen, setIsAlertsOpen] = React.useState(true);

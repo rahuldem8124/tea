@@ -16,13 +16,14 @@ export interface LeafEntry {
   id: string;
   farmerName: string;
   date: string;
-  collectionTime: string;
-  batchId: string;
+  collectionTime?: string;
+  batchId?: string;
   quantityKg: number;
   qualityGrade: QualityGrade; // Raw leaf quality
-  moistureContent: number;
-  finePluckingPercentage: number;
+  moistureContent?: number;
+  finePluckingPercentage?: number;
   pricePerKg: number;
+  totalCost?: number;
 }
 
 export interface Machine {

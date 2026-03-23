@@ -6,15 +6,9 @@ import { godowns as initialData } from "@/lib/data";
 import { Godown } from "@/types";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { Button } from "@/components/ui/button";
-import {
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
 import { Warehouse, MapPin, Database, TrendingUp, MoreVertical, LayoutGrid, Package, Plus } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
-import { cn } from "@/lib/utils";
 
 export default function GodownsPage() {
   const [godowns] = useState<Godown[]>(initialData);

@@ -18,7 +18,6 @@ import {
   Layers, 
   PieChart, 
   TrendingUp, 
-  CheckCircle2, 
   LayoutGrid, 
   Box, 
   Plus, 

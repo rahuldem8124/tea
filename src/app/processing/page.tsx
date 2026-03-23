@@ -14,9 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Cog, Zap, Play, CheckCircle2, Plus, Search, Filter, Timer, ArrowRight, Activity, TrendingDown } from "lucide-react";
+import { Zap, Play, CheckCircle2, Plus, Search, Filter, ArrowRight, Activity, TrendingDown } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { SectionHeader } from "@/components/ui/section-header";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";

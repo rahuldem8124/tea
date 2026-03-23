@@ -48,15 +48,10 @@ export default function LeafCollectionPage() {
   const todayEntries = entries.filter((e) => e.date === TODAY);
   const totalTodayKg = todayEntries.reduce((s, e) => s + e.quantityKg, 0);
   const avgMoisture = todayEntries.length > 0 
-    ? (todayEntries.reduce((s, e) => s + e.moistureContent, 0) / todayEntries.length).toFixed(1)
+    ? (todayEntries.reduce((s, e) => s + (e.moistureContent ?? 0), 0) / todayEntries.length).toFixed(1)
     : "0.0";
   const gradeMap: Record<string, number> = { "A+": 4, A: 3, B: 2, C: 1 };
   
-  const avgGradeScore =
-    todayEntries.length > 0
-      ? todayEntries.reduce((s, e) => s + (gradeMap[e.qualityGrade] ?? 1), 0) /
-        todayEntries.length
-      : 0;
 
   const filtered = entries.filter((e) => {
     const dateMatch = filterDate ? e.date === filterDate : true;
@@ -224,12 +219,12 @@ export default function LeafCollectionPage() {
                               <div 
                                 className={cn(
                                   "h-full transition-all",
-                                  entry.moistureContent > 72 ? "bg-destructive w-[80%]" : "bg-success w-[40%]"
+                                  (entry.moistureContent ?? 0) > 72 ? "bg-destructive w-[80%]" : "bg-success w-[40%]"
                                 )} 
                               />
                            </div>
-                           <span className={cn("text-[10px] font-bold uppercase tracking-widest", entry.moistureContent > 72 ? "text-destructive" : "text-success")}>
-                             {entry.moistureContent}%
+                           <span className={cn("text-[10px] font-bold uppercase tracking-widest", (entry.moistureContent ?? 0) > 72 ? "text-destructive" : "text-success")}>
+                             {entry.moistureContent ?? 0}%
                            </span>
                          </div>
                       </TableCell>
@@ -345,21 +340,3 @@ export default function LeafCollectionPage() {
   );
 }
 
-function StarIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
-  );
-}
