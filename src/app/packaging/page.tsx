@@ -14,13 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Archive, Package, LayoutGrid, CheckCircle2, Plus, Search, Filter, MoreVertical, Box, Weight } from "lucide-react";
+import { Archive, Package, LayoutGrid, CheckCircle2, Plus, Box, Weight } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { AddPackagingModal } from "@/components/modals/AddPackagingModal";
 
 export default function PackagingPage() {
@@ -60,7 +57,10 @@ export default function PackagingPage() {
               <LayoutGrid className="h-4 w-4" />
               Package Inventory
            </Button>
-           <Button className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2">
+           <Button 
+             onClick={() => setIsModalOpen(true)}
+             className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+           >
               <Plus className="h-5 w-5" />
               New Packaging Run
            </Button>
@@ -113,7 +113,7 @@ export default function PackagingPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {records.map((record, idx) => (
+                {records.map((record) => (
                   <TableRow key={record.id} className="group border-b border-border/40 hover:bg-primary/5 transition-all">
                     <TableCell className="pl-6 py-5">
                        <span className="font-black text-sm text-foreground">{record.id}</span>
@@ -141,6 +141,11 @@ export default function PackagingPage() {
           </div>
         </GlassCard>
       </div>
+      <AddPackagingModal 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen}
+        onAdd={(record) => setRecords(prev => [record, ...prev])}
+      />
     </motion.div>
   );
 }

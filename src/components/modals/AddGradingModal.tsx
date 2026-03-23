@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { processingBatches } from "@/lib/data";
 import { GradingRecord } from "@/types";
-import { Layers, ArrowRight, Activity, Percent } from "lucide-react";
+import { Layers, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddGradingModalProps {

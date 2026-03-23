@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { leafEntries as initialData } from "@/lib/data";
 import { LeafEntry } from "@/types";
 import { KPICard } from "@/components/dashboard/KPICard";
@@ -24,12 +24,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Leaf, Plus, Search, Filter, Mic, Zap, TrendingUp, MoreVertical, DollarSign } from "lucide-react";
+import { Leaf, Plus, Search, Mic, Zap, TrendingUp, MoreVertical } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
-import { AlertBadge } from "@/components/ui/alert-badge";
 import { FloatingPanel } from "@/components/ui/floating-panel";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
@@ -59,9 +57,6 @@ export default function LeafCollectionPage() {
       ? todayEntries.reduce((s, e) => s + (gradeMap[e.qualityGrade] ?? 1), 0) /
         todayEntries.length
       : 0;
-      
-  const avgGradeLabel =
-    avgGradeScore >= 3.5 ? "A+" : avgGradeScore >= 2.5 ? "A" : avgGradeScore >= 1.5 ? "B" : "C";
 
   const filtered = entries.filter((e) => {
     const dateMatch = filterDate ? e.date === filterDate : true;

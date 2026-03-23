@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users, Plus, UserCheck, Search, Filter, Briefcase, Clock, Zap, MoreHorizontal, ShieldCheck, Mail } from "lucide-react";
+import { Users, Plus, UserCheck, Search, Filter, Clock, Zap, MoreHorizontal, ShieldCheck, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";

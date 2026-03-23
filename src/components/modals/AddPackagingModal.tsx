@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { gradingRecords } from "@/lib/data";
 import { PackagingRecord } from "@/types";
-import { Archive, ArrowRight, Package, Weight } from "lucide-react";
+import { Archive, ArrowRight, Weight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddPackagingModalProps {
@@ -35,7 +35,6 @@ export function AddPackagingModal({ open, onOpenChange, onAdd }: AddPackagingMod
   const [weightPerPackage, setWeightPerPackage] = React.useState("");
   const [totalPackages, setTotalPackages] = React.useState("");
 
-  const selectedGrading = gradingRecords.find((r) => r.batchId === batchId);
   const totalVolume = Number(weightPerPackage) * Number(totalPackages);
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { truckDispatches as initialData } from "@/lib/data";
 import { TruckDispatch, TruckStatus } from "@/types";
@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Truck, MapPin, Navigation, Clock, CheckCircle2, AlertTriangle, Plus, Search, Filter, MoreVertical, Globe } from "lucide-react";
+import { Truck, MapPin, Navigation, Clock, CheckCircle2, Plus, Search, Filter, Globe } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Input } from "@/components/ui/input";
@@ -88,7 +88,10 @@ export default function LogisticsPage() {
               <Navigation className="h-4 w-4" />
               Live Fleet Map
            </Button>
-           <Button className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2">
+           <Button 
+             onClick={() => setIsModalOpen(true)}
+             className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+           >
               <Plus className="h-5 w-5" />
               Dispatch New Truck
            </Button>
@@ -233,6 +236,11 @@ export default function LogisticsPage() {
           </div>
         </GlassCard>
       </div>
+      <DispatchTruckModal 
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        onAdd={(dispatch) => setDispatches(prev => [dispatch, ...prev])}
+      />
     </motion.div>
   );
 }

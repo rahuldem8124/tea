@@ -11,19 +11,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import {
   LayoutDashboard,
   Leaf,
   Cog,
   Users,
-  BarChart3,
   Factory,
   LogOut,
   Settings,
-  ChevronRight,
-  ClipboardList,
   Layers,
   Archive,
   Truck,
@@ -155,7 +151,19 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-function NavItem({ item, pathname, router }: { item: any; pathname: string; router: any }) {
+interface NavItemProps {
+  item: {
+    label: string;
+    href: string;
+    icon: React.ElementType;
+  };
+  pathname: string;
+  router: {
+    push: (href: string) => void;
+  };
+}
+
+function NavItem({ item, pathname, router }: NavItemProps) {
   const isActive =
     item.href === "/"
       ? pathname === "/"

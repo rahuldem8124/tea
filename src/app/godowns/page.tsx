@@ -7,23 +7,17 @@ import { Godown } from "@/types";
 import { KPICard } from "@/components/dashboard/KPICard";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Warehouse, MapPin, Database, CheckCircle2, TrendingUp, Search, Filter, MoreVertical, LayoutGrid, Package, Plus } from "lucide-react";
+import { Warehouse, MapPin, Database, TrendingUp, MoreVertical, LayoutGrid, Package, Plus } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export default function GodownsPage() {
-  const [godowns, setGodowns] = useState<Godown[]>(initialData);
+  const [godowns] = useState<Godown[]>(initialData);
 
   const totalStock = godowns.reduce((acc, g) => acc + g.availableStockKg, 0);
   const totalCapacity = godowns.reduce((acc, g) => acc + g.receivedQtyKg, 0);

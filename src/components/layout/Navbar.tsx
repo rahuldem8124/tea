@@ -20,7 +20,6 @@ import {
   AlertTriangle,
   CheckCircle2,
   Info,
-  X,
 } from "lucide-react";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { Input } from "@/components/ui/input";

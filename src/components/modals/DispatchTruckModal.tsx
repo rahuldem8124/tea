@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
@@ -21,7 +20,6 @@ import {
 import { godowns, packagingRecords } from "@/lib/data";
 import { TruckDispatch } from "@/types";
 import { Truck, ArrowRight, User, MapPin, Package } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface DispatchTruckModalProps {
   open: boolean;

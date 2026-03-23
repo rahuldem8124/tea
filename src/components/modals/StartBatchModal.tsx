@@ -4,10 +4,8 @@ import * as React from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { machines } from "@/lib/data";
 import { ProcessingBatch } from "@/types";
-import { Zap, Cog, Timer, ArrowRight, Activity } from "lucide-react";
+import { Zap, Timer, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 

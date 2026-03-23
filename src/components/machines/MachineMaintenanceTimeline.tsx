@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2, AlertTriangle, Wrench, Clock } from "lucide-react";
+import { CheckCircle2, Wrench, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";
 

@@ -4,12 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { machines as initialData } from "@/lib/data";
 import { Machine } from "@/types";
-import { MachineCard } from "@/components/machines/MachineCard";
 import { AddMachineModal } from "@/components/machines/AddMachineModal";
-import { MachineMaintenanceTimeline } from "@/components/machines/MachineMaintenanceTimeline";
 import { Button } from "@/components/ui/button";
 import { Plus, AlertTriangle, CheckCircle2, Wrench, Cog, Activity, Thermometer, Zap, Gauge, RefreshCw, Filter, Package } from "lucide-react";
-import { SectionHeader } from "@/components/ui/section-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -21,14 +18,9 @@ export default function MachinesPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editMachine, setEditMachine] = useState<Machine | null>(null);
 
-  const activeCount = machines.filter((m) => m.status === "Active").length;
   const maintenanceCount = machines.filter((m) => m.status === "Maintenance").length;
   const brokenCount = machines.filter((m) => m.status === "Broken").length;
 
-  const handleEdit = (machine: Machine) => {
-    setEditMachine(machine);
-    setModalOpen(true);
-  };
 
   const handleAdd = () => {
     setEditMachine(null);
@@ -43,11 +35,6 @@ export default function MachinesPage() {
     });
   };
 
-  const handleToggleRental = (id: string, value: boolean) => {
-    setMachines((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, isRental: value } : m))
-    );
-  };
 
   return (
     <motion.div

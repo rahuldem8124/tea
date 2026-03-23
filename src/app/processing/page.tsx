@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Cog, Zap, Play, CheckCircle2, AlertCircle, Plus, Search, Filter, MoreVertical, Timer, ArrowRight, Activity, TrendingDown } from "lucide-react";
+import { Cog, Zap, Play, CheckCircle2, Plus, Search, Filter, Timer, ArrowRight, Activity, TrendingDown } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,10 @@ export default function ProcessingPage() {
               <Zap className="h-4 w-4" />
               Machine Health
            </Button>
-           <Button className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg shadow-primary/20">
+           <Button 
+            onClick={() => setIsModalOpen(true)}
+            className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg shadow-primary/20"
+           >
               <Plus className="h-5 w-5" />
               Start New Batch
            </Button>
@@ -98,122 +101,92 @@ export default function ProcessingPage() {
           title="System Load"
           value="82%"
           subtitle="Optimal efficiency"
-          icon={Activity}
-          iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none"
+          icon={Zap}
+          iconClassName="bg-warning/10 text-warning border-warning/20 shadow-none"
         />
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4 py-2">
-           <SectionHeader title="Production Ledger" description="Track batch movement from input to output" />
-           <div className="flex items-center gap-3 bg-muted/20 p-1 rounded-2xl border border-border/50 backdrop-blur-sm">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Search Batch ID..."
+        <GlassCard className="p-4" hoverLift={false}>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+             <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input 
+                  placeholder="Search batches..." 
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 h-10 w-64 bg-transparent border-0 focus-visible:ring-0 text-sm font-bold"
+                  className="pl-10 h-10 bg-muted/30 border-border/50 rounded-xl"
                 />
-              </div>
-              <Separator orientation="vertical" className="h-6 bg-border/50" />
-              <Button variant="ghost" size="sm" className="h-9 rounded-xl px-3 text-xs font-bold gap-2">
-                 <Filter className="h-3.5 w-3.5" />
-                 All Machines
-              </Button>
-           </div>
-        </div>
-
-        <GlassCard className="p-0 overflow-hidden border-border/40" hoverLift={false}>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-b border-border/50 hover:bg-transparent bg-muted/10">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 h-14">Batch ID</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Machine</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Input (kg)</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Time</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14 text-center">Status</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right h-14">Output (kg)</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Wastage / Loss</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <AnimatePresence mode="popLayout">
-                  {filteredBatches.map((batch, idx) => {
-                    const machine = machines.find(m => m.id === batch.machineId);
-                    return (
-                      <motion.tr
-                        key={batch.id}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: idx * 0.03 }}
-                        className="group border-b border-border/40 hover:bg-primary/5 transition-all"
-                      >
-                         <TableCell className="pl-6 py-5">
-                            <span className="font-black text-sm text-foreground tracking-tight">{batch.id}</span>
-                         </TableCell>
-                         <TableCell>
-                            <div className="flex items-center gap-2">
-                               <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center border border-border/50">
-                                  <Cog className="h-4 w-4 text-muted-foreground" />
-                               </div>
-                               <div>
-                                  <p className="font-bold text-xs text-foreground uppercase tracking-tight">{machine?.name || batch.machineId}</p>
-                                  <p className="text-[9px] font-bold text-muted-foreground">{machine?.type}</p>
-                               </div>
-                            </div>
-                         </TableCell>
-                         <TableCell className="font-black text-xs text-foreground lining-nums">
-                            {batch.inputQtyKg.toLocaleString()}
-                         </TableCell>
-                         <TableCell>
-                            <div className="flex items-center gap-1 text-[10px] font-bold">
-                               <Timer className="h-3 w-3 text-muted-foreground" />
-                               <span className="text-foreground">{batch.startTime}</span>
-                               {batch.endTime && (
-                                 <>
-                                   <ArrowRight className="h-2 w-2 text-muted-foreground" />
-                                   <span className="text-muted-foreground">{batch.endTime}</span>
-                                 </>
-                               )}
-                            </div>
-                         </TableCell>
-                         <TableCell className="text-center">
-                            <Badge variant="outline" className={cn(
-                              "text-[9px] font-black px-2 py-0.5 uppercase tracking-widest",
-                              batch.status === 'processing' ? "text-primary border-primary/30 bg-primary/5" :
-                              batch.status === 'completed' ? "text-success border-success/30 bg-success/5" : "text-muted-foreground"
-                            )}>
-                               {batch.status}
-                            </Badge>
-                         </TableCell>
-                         <TableCell className="text-right font-black text-sm text-foreground lining-nums">
-                            {batch.outputQtyKg?.toLocaleString() || "—"}
-                         </TableCell>
-                         <TableCell className="text-right pr-6">
-                            {batch.wastagePercentage ? (
-                              <div className="inline-flex flex-col items-end">
-                                 <span className="text-xs font-black text-destructive italic">-{batch.wastagePercentage}%</span>
-                                 <span className="text-[9px] font-bold text-muted-foreground opacity-60">Process Loss</span>
-                              </div>
-                            ) : (
-                              <span className="text-[10px] font-bold text-muted-foreground uppercase opacity-40">Calculating...</span>
-                            )}
-                         </TableCell>
-                      </motion.tr>
-                    );
-                  })}
-                </AnimatePresence>
-              </TableBody>
-            </Table>
+             </div>
+             <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" className="rounded-lg h-9 gap-2 font-bold text-[11px] uppercase tracking-widest">
+                  <Filter className="h-3.5 w-3.5" />
+                  Filter
+                </Button>
+                <Separator orientation="vertical" className="h-4 bg-border/50" />
+                <Button variant="ghost" size="sm" className="rounded-lg h-9 gap-2 font-bold text-[11px] uppercase tracking-widest">
+                  Export Data
+                </Button>
+             </div>
           </div>
         </GlassCard>
+
+        <GlassCard className="p-0 overflow-hidden" hoverLift={false}>
+          <Table>
+            <TableHeader className="bg-muted/30">
+              <TableRow className="hover:bg-transparent border-border/50">
+                <TableHead className="w-[120px] font-black text-[10px] uppercase tracking-widest py-4 pl-6 text-muted-foreground">Batch ID</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Machine</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Input (kg)</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Start Time</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Status</TableHead>
+                <TableHead className="text-right pr-6 font-black text-[10px] uppercase tracking-widest text-muted-foreground">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <AnimatePresence mode="popLayout">
+                {filteredBatches.map((batch) => {
+                  const machine = machines.find(m => m.id === batch.machineId);
+                  return (
+                    <TableRow key={batch.id} className="group border-border/40 hover:bg-primary/[0.02] transition-colors">
+                      <TableCell className="font-bold pl-6">{batch.id}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-bold text-foreground">{machine?.name || batch.machineId}</span>
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-medium">{machine?.type}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-bold">{batch.inputQtyKg} kg</TableCell>
+                      <TableCell className="text-muted-foreground font-medium">{batch.startTime}</TableCell>
+                      <TableCell>
+                         <Badge 
+                          variant={batch.status === 'processing' ? 'default' : 'secondary'}
+                          className={cn(
+                            "rounded-lg px-2 py-0.5 font-bold text-[10px] uppercase tracking-widest",
+                            batch.status === 'processing' ? "bg-primary/20 text-primary border-primary/20 animate-pulse" : "bg-success/20 text-success border-success/20"
+                          )}
+                         >
+                           {batch.status}
+                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-right pr-6">
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </AnimatePresence>
+            </TableBody>
+          </Table>
+        </GlassCard>
       </div>
+      
       <StartBatchModal 
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        onAdd={(batch) => setBatches(prev => [batch, ...prev])}
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        onAdd={(batch) => setBatches(prev => [batch, ...prev])} 
       />
     </motion.div>
   );

@@ -1,15 +1,13 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Machine } from "@/types";
 import { StatusBadge } from "./StatusBadge";
-import { Cog, Calendar, Pencil, AlertTriangle, TrendingDown, Gauge } from "lucide-react";
+import { Cog, Pencil, AlertTriangle, TrendingDown, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/ui/glass-card";
-import { AlertBadge } from "@/components/ui/alert-badge";
 
 interface MachineCardProps {
   machine: Machine;

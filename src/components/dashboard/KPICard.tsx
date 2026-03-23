@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 import { LucideIcon } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 

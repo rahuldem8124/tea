@@ -57,8 +57,8 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
         
         <div className="space-y-8">
           {items.map((item, i) => {
-            const config = typeConfig[item.type];
-            const Icon = config.icon;
+            const config = typeConfig[item.type] || typeConfig.leaf;
+            const Icon = config.icon || Leaf;
             
             return (
               <motion.div
@@ -75,7 +75,7 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <Icon className={cn("h-3.5 w-3.5", config.color)} />
+                       <Icon className={cn("h-3.5 w-3.5", config.color)} />
                       <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                         {item.type}
                       </span>
