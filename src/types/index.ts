@@ -31,7 +31,7 @@ export interface Machine {
   name: string;
   type: string;
   status: MachineStatus;
-  stage: ProcessStage;
+  stage?: ProcessStage;
   currentBatchId?: string;
   loadPercentage?: number;
   temperature?: number;
