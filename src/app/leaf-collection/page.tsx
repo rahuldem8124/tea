@@ -50,8 +50,7 @@ export default function LeafCollectionPage() {
   const avgMoisture = todayEntries.length > 0 
     ? (todayEntries.reduce((s, e) => s + (e.moistureContent ?? 0), 0) / todayEntries.length).toFixed(1)
     : "0.0";
-  const gradeMap: Record<string, number> = { "A+": 4, A: 3, B: 2, C: 1 };
-  
+
 
   const filtered = entries.filter((e) => {
     const dateMatch = filterDate ? e.date === filterDate : true;
