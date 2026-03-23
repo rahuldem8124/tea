@@ -22,7 +22,7 @@ interface CollectionSalesChartProps {
 
 const chartConfig = {
   collection: { label: "Collection (kg)", color: "var(--color-chart-1)" },
-  sales: { label: "Sales (kg)", color: "var(--color-chart-2)" },
+  processed: { label: "Processed (kg)", color: "var(--color-chart-2)" },
 };
 
 export function CollectionSalesChart({ data }: CollectionSalesChartProps) {
@@ -31,7 +31,7 @@ export function CollectionSalesChart({ data }: CollectionSalesChartProps) {
       <CardHeader className="pb-3 flex flex-row items-center gap-2">
         <TrendingUp className="h-4 w-4 text-primary" />
         <CardTitle className="text-base font-semibold">
-          Daily Collection vs Sales
+          Daily Intake vs Production
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -42,7 +42,7 @@ export function CollectionSalesChart({ data }: CollectionSalesChartProps) {
                 <stop offset="5%" stopColor="var(--color-chart-1)" stopOpacity={0.18} />
                 <stop offset="95%" stopColor="var(--color-chart-1)" stopOpacity={0} />
               </linearGradient>
-              <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="processedGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="var(--color-chart-2)" stopOpacity={0.18} />
                 <stop offset="95%" stopColor="var(--color-chart-2)" stopOpacity={0} />
               </linearGradient>
@@ -71,10 +71,10 @@ export function CollectionSalesChart({ data }: CollectionSalesChartProps) {
             />
             <Area
               type="monotone"
-              dataKey="sales"
+              dataKey="processed"
               stroke="var(--color-chart-2)"
               strokeWidth={2}
-              fill="url(#salesGrad)"
+              fill="url(#processedGrad)"
             />
           </AreaChart>
         </ChartContainer>

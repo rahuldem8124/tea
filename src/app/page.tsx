@@ -5,7 +5,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { CollectionSalesChart } from "@/components/dashboard/CollectionSalesChart";
 import { ProfitChart } from "@/components/dashboard/ProfitChart";
-import { kpiData, recentActivity, dailyChartData } from "@/lib/data";
+import { kpiData, recentActivity, dailyChartData, alerts } from "@/lib/data";
 import {
   TrendingUp,
   TrendingDown,
@@ -23,6 +23,11 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { AlertBadge } from "@/components/ui/alert-badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+
+import { ProcessPipeline } from "@/components/dashboard/ProcessPipeline";
+
 
 function formatCurrency(v: number) {
   return `Rs. ${(v / 1000).toFixed(0)}K`;
@@ -71,43 +76,46 @@ export default function DashboardPage() {
         <div className={isAlertsOpen ? "lg:col-span-9 space-y-8" : "lg:col-span-12 space-y-8 transition-all duration-500"}>
           
           <SectionHeader 
-            title="Daily Factory Summary" 
-            description="Real-time performance metrics and collection status"
+            title="Live Process Pipeline" 
+            description="Real-time status of tea batches across the production line"
           />
+
+          <ProcessPipeline />
+
 
           {/* KPI Grid */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <KPICard
-              title="Leaf Collected"
-              value="1,245 kg"
-              subtitle="24% of weekly target"
+              title="Total Leaf Collected"
+              value={`${kpiData.totalLeafCollected.toLocaleString()} kg`}
+              subtitle="Overall intake to date"
               icon={Leaf}
               trend="up"
-              trendValue="12.4%"
+              trendValue="8.2%"
             />
             <KPICard
-              title="Active Machines"
-              value="18 / 20"
-              subtitle="2 in maintenance"
+              title="Total Processed"
+              value={`${kpiData.totalProcessed.toLocaleString()} kg`}
+              subtitle="Finished tea production"
               icon={Zap}
+              trend="up"
+              trendValue="5.4%"
+            />
+            <KPICard
+              title="Grade Distribution"
+              value={`A:${kpiData.gradeDistribution.A}%`}
+              subtitle={`B:${kpiData.gradeDistribution.B}% | C:${kpiData.gradeDistribution.C}%`}
+              icon={Package}
               trend="neutral"
               trendValue="Stable"
             />
             <KPICard
-              title="Attendance"
-              value="142 / 150"
-              subtitle="8 absent today"
-              icon={Package}
-              trend="down"
-              trendValue="1.2%"
-            />
-            <KPICard
-              title="Daily Profit"
-              value="Rs. 84.2K"
-              subtitle="Margin: 18.5%"
-              icon={DollarSign}
+              title="Logistics Flow"
+              value={String(kpiData.trucksInTransit)}
+              subtitle="Trucks currently on route"
+              icon={TrendingUp}
               trend="up"
-              trendValue="5.7%"
+              trendValue="2 New"
             />
           </div>
 
@@ -186,35 +194,26 @@ export default function DashboardPage() {
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-xl relative group overflow-hidden">
-                       <div className="flex items-center justify-between mb-1">
-                          <AlertBadge type="critical">Machine Fail</AlertBadge>
-                          <span className="text-[9px] font-medium text-muted-foreground">12m ago</span>
-                       </div>
-                       <p className="text-xs font-bold text-foreground mb-1 leading-snug">Sorting Conveyor B-12 stopped</p>
-                       <p className="text-[10px] text-muted-foreground font-medium">Estimated loss: Rs 14.5K/hr</p>
-                       <div className="absolute inset-y-0 left-0 w-1 bg-destructive glow-red" />
-                    </div>
-
-                    <div className="p-3 bg-warning/10 border border-warning/20 rounded-xl relative overflow-hidden">
-                       <div className="flex items-center justify-between mb-1">
-                          <AlertBadge type="warning">Maintenance</AlertBadge>
-                          <span className="text-[9px] font-medium text-muted-foreground">45m ago</span>
-                       </div>
-                       <p className="text-xs font-bold text-foreground mb-1 leading-snug">CTC Machine 1 overdue</p>
-                       <p className="text-[10px] text-muted-foreground font-medium">Schedule bypass ends in 2hr</p>
-                       <div className="absolute inset-y-0 left-0 w-1 bg-warning glow-yellow shadow-inner shadow-black/20" />
-                    </div>
-
-                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl relative overflow-hidden">
-                       <div className="flex items-center justify-between mb-1">
-                          <AlertBadge type="info">Payment</AlertBadge>
-                          <span className="text-[9px] font-medium text-muted-foreground">2h ago</span>
-                       </div>
-                       <p className="text-xs font-bold text-foreground mb-1 leading-snug">3 Pending Supplier Pays</p>
-                       <p className="text-[10px] text-muted-foreground font-medium">Total: Rs. 1.2M overdue</p>
-                       <div className="absolute inset-y-0 left-0 w-1 bg-blue-500" />
-                    </div>
+                    {alerts.map((alert) => (
+                      <div key={alert.id} className={cn(
+                        "p-3 rounded-xl relative overflow-hidden border",
+                        alert.severity === 'high' ? "bg-destructive/10 border-destructive/20" : 
+                        alert.severity === 'medium' ? "bg-warning/10 border-warning/20" : "bg-blue-500/10 border-blue-500/20"
+                      )}>
+                         <div className="flex items-center justify-between mb-1">
+                            <AlertBadge type={alert.severity === 'high' ? 'critical' : alert.severity === 'medium' ? 'warning' : 'info'}>
+                              {alert.type.toUpperCase()}
+                            </AlertBadge>
+                            <span className="text-[9px] font-medium text-muted-foreground">{alert.time}</span>
+                         </div>
+                         <p className="text-xs font-bold text-foreground mb-1 leading-snug">{alert.message}</p>
+                         <div className={cn(
+                           "absolute inset-y-0 left-0 w-1",
+                           alert.severity === 'high' ? "bg-destructive glow-red" : 
+                           alert.severity === 'medium' ? "bg-warning glow-yellow" : "bg-blue-500"
+                         )} />
+                      </div>
+                    ))}
                   </div>
 
                   <Button variant="outline" className="w-full mt-6 rounded-xl text-[10px] font-black uppercase tracking-widest border-border/50 hover:bg-primary/5 hover:text-primary transition-all">

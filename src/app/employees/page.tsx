@@ -25,6 +25,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
+
 const shiftColors: Record<string, string> = {
   Morning: "bg-success/10 text-success border-success/20 glow-green",
   Afternoon: "bg-warning/10 text-warning border-warning/20 glow-yellow",
@@ -98,7 +99,9 @@ export default function EmployeesPage() {
         </Button>
       </div>
 
+
       {/* Summary Cards */}
+
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <KPICard
           title="Headcount"

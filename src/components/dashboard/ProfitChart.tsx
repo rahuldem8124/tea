@@ -8,23 +8,23 @@ import {
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
 import { ChartDataPoint } from "@/types";
-import { DollarSign } from "lucide-react";
+import { Box } from "lucide-react";
 
 interface ProfitChartProps {
   data: ChartDataPoint[];
 }
 
 const chartConfig = {
-  profit: { label: "Profit (Rs. 000)", color: "var(--color-chart-1)" },
+  dispatched: { label: "Dispatched (kg)", color: "var(--color-chart-1)" },
 };
 
 export function ProfitChart({ data }: ProfitChartProps) {
   return (
     <Card className="border border-border/60 shadow-none">
       <CardHeader className="pb-3 flex flex-row items-center gap-2">
-        <DollarSign className="h-4 w-4 text-primary" />
+        <Box className="h-4 w-4 text-primary" />
         <CardTitle className="text-base font-semibold">
-          Profit Trend
+          Dispatch Volume
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -45,7 +45,7 @@ export function ProfitChart({ data }: ProfitChartProps) {
               tickFormatter={(v) => `${v}`}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="profit" radius={[4, 4, 0, 0]}>
+            <Bar dataKey="dispatched" radius={[4, 4, 0, 0]}>
               {data.map((_, i) => (
                 <Cell
                   key={i}

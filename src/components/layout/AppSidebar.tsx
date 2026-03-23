@@ -23,17 +23,31 @@ import {
   LogOut,
   Settings,
   ChevronRight,
+  ClipboardList,
+  Layers,
+  Archive,
+  Truck,
+  Warehouse,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-const navItems = [
+const productionItems = [
   { label: "Dashboard", href: "/", icon: LayoutDashboard },
   { label: "Leaf Collection", href: "/leaf-collection", icon: Leaf },
-  { label: "Machines", href: "/machines", icon: Cog },
+  { label: "Processing", href: "/processing", icon: Cog },
+  { label: "Grading", href: "/grading", icon: Layers },
+  { label: "Packaging", href: "/packaging", icon: Archive },
+];
+
+const logisticsItems = [
+  { label: "Logistics", href: "/logistics", icon: Truck },
+  { label: "Godowns", href: "/godowns", icon: Warehouse },
+];
+
+const adminItems = [
   { label: "Employees", href: "/employees", icon: Users },
-  { label: "Sales & Export", href: "/sales", icon: BarChart3 },
 ];
 
 export function AppSidebar() {
@@ -58,48 +72,51 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-3">
+      <SidebarContent className="px-3 gap-6 py-4">
+        {/* Production Group */}
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-4">
-            Operations
+          <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-2">
+            Production flow
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2">
-              {navItems.map((item) => {
-                const isActive =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href);
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      isActive={isActive}
-                      tooltip={item.label}
-                      className={cn(
-                        "h-12 px-4 rounded-xl transition-all duration-300 relative group overflow-hidden",
-                        isActive 
-                          ? "bg-primary/10 text-primary border border-primary/20 shadow-sm" 
-                          : "hover:bg-muted/50 text-muted-foreground hover:text-foreground border border-transparent"
-                      )}
-                      onClick={() => router.push(item.href)}
-                    >
-                      <div className={cn(
-                        "transition-transform duration-300 group-hover:scale-110",
-                        isActive && "text-primary"
-                      )}>
-                        <item.icon className="h-5 w-5" />
-                      </div>
-                      <span className="font-bold tracking-tight ml-2">{item.label}</span>
-                      {isActive && (
-                        <motion.div 
-                          layoutId="active-indicator"
-                          className="absolute right-2 h-1.5 w-1.5 rounded-full bg-primary glow-green"
-                        />
-                      )}
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
+            <SidebarMenu className="gap-1.5">
+              {productionItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <NavItem item={item} pathname={pathname} router={router} />
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Logistics Group */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-2">
+            Supply Chain
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="gap-1.5">
+              {logisticsItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <NavItem item={item} pathname={pathname} router={router} />
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Admin Group */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-2">
+            Administration
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu className="gap-1.5">
+              {adminItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <NavItem item={item} pathname={pathname} router={router} />
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -136,5 +153,39 @@ export function AppSidebar() {
         </div>
       </SidebarFooter>
     </Sidebar>
+  );
+}
+function NavItem({ item, pathname, router }: { item: any; pathname: string; router: any }) {
+  const isActive =
+    item.href === "/"
+      ? pathname === "/"
+      : pathname.startsWith(item.href);
+
+  return (
+    <SidebarMenuButton
+      isActive={isActive}
+      tooltip={item.label}
+      className={cn(
+        "h-11 px-4 rounded-xl transition-all duration-300 relative group overflow-hidden",
+        isActive 
+          ? "bg-primary/10 text-primary border border-primary/20 shadow-sm" 
+          : "hover:bg-muted/5 text-muted-foreground hover:text-foreground border border-transparent"
+      )}
+      onClick={() => router.push(item.href)}
+    >
+      <div className={cn(
+        "transition-transform duration-300 group-hover:scale-110",
+        isActive && "text-primary"
+      )}>
+        <item.icon className="h-4.5 w-4.5" />
+      </div>
+      <span className="font-bold tracking-tight ml-2 text-xs">{item.label}</span>
+      {isActive && (
+        <motion.div 
+          layoutId="active-indicator"
+          className="absolute right-2 h-1 w-1 rounded-full bg-primary glow-green"
+        />
+      )}
+    </SidebarMenuButton>
   );
 }

@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Leaf, Plus, Search, Filter, Mic, Zap, TrendingUp, MoreVertical } from "lucide-react";
+import { Leaf, Plus, Search, Filter, Mic, Zap, TrendingUp, MoreVertical, DollarSign } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { AlertBadge } from "@/components/ui/alert-badge";
@@ -32,6 +32,7 @@ import { FloatingPanel } from "@/components/ui/floating-panel";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+
 
 const TODAY = new Date().toISOString().split("T")[0];
 
@@ -48,7 +49,9 @@ export default function LeafCollectionPage() {
 
   const todayEntries = entries.filter((e) => e.date === TODAY);
   const totalTodayKg = todayEntries.reduce((s, e) => s + e.quantityKg, 0);
-  const totalTodayCost = todayEntries.reduce((s, e) => s + e.totalCost, 0);
+  const avgMoisture = todayEntries.length > 0 
+    ? (todayEntries.reduce((s, e) => s + e.moistureContent, 0) / todayEntries.length).toFixed(1)
+    : "0.0";
   const gradeMap: Record<string, number> = { "A+": 4, A: 3, B: 2, C: 1 };
   
   const avgGradeScore =
@@ -93,49 +96,46 @@ export default function LeafCollectionPage() {
           <h1 className="text-4xl font-black tracking-tight text-foreground">
             Leaf <span className="text-primary italic">Collection</span>
           </h1>
-          <p className="text-muted-foreground mt-2 font-medium">
-            Manage intake from {farmers.length} active suppliers.
-          </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button 
-            variant="outline" 
-            onClick={() => setIsQuickEntryOpen(true)} 
-            className="rounded-xl h-12 px-6 font-bold text-sm bg-background/50 border-border/50 hover:bg-primary/5 hover:text-primary transition-all gap-2"
-          >
-            <Mic className="h-4 w-4 animate-pulse text-primary" />
-            Voice Input
-          </Button>
-          <Button 
-            onClick={() => setIsQuickEntryOpen(true)} 
-            className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg"
-          >
-            <Plus className="h-5 w-5" />
-            Quick Entry
-          </Button>
+           <Button 
+            onClick={() => setIsQuickEntryOpen(true)}
+            className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+           >
+              <Plus className="h-5 w-5" />
+              Add New Intake
+           </Button>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <KPICard
-          title="Collected Today"
+          title="Leaf Intake Today"
           value={`${totalTodayKg.toLocaleString()} kg`}
           subtitle={`${todayEntries.length} total deliveries`}
           icon={Leaf}
         />
         <KPICard
-          title="Avg Quality"
-          value={avgGradeLabel}
-          subtitle="Real-time grade index"
-          icon={Filter}
+          title="Avg Moisture"
+          value={`${avgMoisture}%`}
+          subtitle="Real-time intake avg"
+          icon={Zap}
+          iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none"
+        />
+        <KPICard
+          title="Active Batches"
+          value={String(todayEntries.length)}
+          subtitle="Pending processing"
+          icon={TrendingUp}
           iconClassName="bg-chart-2/10 text-chart-2 border-chart-2/20 shadow-none"
         />
         <KPICard
-          title="Total Cost"
-          value={`Rs. ${(totalTodayCost / 1000).toFixed(1)}K`}
-          subtitle="Estimated payable"
-          icon={TrendingUp}
+          title="Total Collected"
+          value={`${totalTodayKg.toLocaleString()} kg`}
+          subtitle="Cumulative today"
+          icon={Leaf}
           iconClassName="bg-success/10 text-success border-success/20 shadow-none"
         />
       </div>
@@ -174,13 +174,13 @@ export default function LeafCollectionPage() {
             <Table>
               <TableHeader>
                 <TableRow className="border-b border-border/50 hover:bg-transparent bg-muted/20">
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 h-12">Supplier</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Performance</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Date / Time</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 h-12">Batch ID</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Supplier</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Time</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right h-12">Qty (kg)</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Grade</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Payment</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-12">Total (Rs)</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-12">Raw Quality</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Moisture</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-12">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -196,7 +196,7 @@ export default function LeafCollectionPage() {
                   </TableRow>
                 ) : (
                   filtered.map((entry, idx) => (
-                    <motion.tr
+                     <motion.tr
                       key={entry.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -204,6 +204,9 @@ export default function LeafCollectionPage() {
                       className="group border-b border-border/50 hover:bg-primary/5 transition-all cursor-default"
                     >
                       <TableCell className="pl-6 py-4">
+                        <span className="font-black text-xs text-primary">{entry.batchId}</span>
+                      </TableCell>
+                      <TableCell>
                         <div className="flex items-center gap-3">
                            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary border border-primary/20">
                              {entry.farmerName.split(' ').map(n => n[0]).join('')}
@@ -212,35 +215,33 @@ export default function LeafCollectionPage() {
                         </div>
                       </TableCell>
                       <TableCell>
-                         <div className="flex items-center gap-1">
-                            <StarIcon className="h-3 w-3 fill-yellow-500 text-yellow-500" />
-                            <span className="text-xs font-black">4.8</span>
-                         </div>
-                      </TableCell>
-                      <TableCell className="text-xs font-medium text-muted-foreground">
-                        {entry.date} <span className="text-[10px] ml-1 bg-muted px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">08:45 AM</span>
+                         <span className="text-xs font-bold text-muted-foreground">{entry.collectionTime}</span>
                       </TableCell>
                       <TableCell className="text-right font-black text-foreground lining-nums">
                         {entry.quantityKg.toLocaleString()}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-center">
                         <QualityBadge grade={entry.qualityGrade} />
                       </TableCell>
                       <TableCell>
                          <div className="flex items-center gap-2">
-                           <Switch className="scale-75 data-[state=checked]:bg-success border-border/50" />
-                           <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-colors">Pending</span>
+                           <div className="h-1.5 w-12 bg-muted rounded-full overflow-hidden">
+                              <div 
+                                className={cn(
+                                  "h-full transition-all",
+                                  entry.moistureContent > 72 ? "bg-destructive w-[80%]" : "bg-success w-[40%]"
+                                )} 
+                              />
+                           </div>
+                           <span className={cn("text-[10px] font-bold uppercase tracking-widest", entry.moistureContent > 72 ? "text-destructive" : "text-success")}>
+                             {entry.moistureContent}%
+                           </span>
                          </div>
                       </TableCell>
                       <TableCell className="text-right pr-6">
-                        <div className="flex items-center justify-end gap-3">
-                           <span className="font-black text-primary lining-nums">
-                             {entry.totalCost.toLocaleString()}
-                           </span>
-                           <Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
-                             <MoreVertical className="h-4 w-4" />
-                           </Button>
-                        </div>
+                         <Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                           <MoreVertical className="h-4 w-4" />
+                         </Button>
                       </TableCell>
                     </motion.tr>
                   ))
@@ -269,13 +270,24 @@ export default function LeafCollectionPage() {
             <div className="grid grid-cols-2 gap-4">
                <div className="space-y-4">
                   <label className="text-label ml-1">Quantity (kg)</label>
-                  <Input type="number" placeholder="00.0" className="h-20 text-4xl font-black text-center rounded-3xl bg-primary/5 border-primary/20 text-primary focus-visible:ring-primary/40" />
+                  <Input type="number" placeholder="00.0" className="h-16 text-2xl font-black text-center rounded-2xl bg-primary/5 border-primary/20 text-primary focus-visible:ring-primary/40" />
+               </div>
+               <div className="space-y-4">
+                  <label className="text-label ml-1">Moisture (%)</label>
+                  <Input type="number" placeholder="68" className="h-16 text-2xl font-black text-center rounded-2xl bg-blue-500/5 border-blue-500/20 text-blue-500" />
+               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-4">
+                  <label className="text-label ml-1">Fine Plucking (%)</label>
+                  <Input type="number" placeholder="80" className="h-16 text-2xl font-black text-center rounded-2xl bg-chart-2/5 border-chart-2/20 text-chart-2" />
                </div>
                <div className="space-y-4">
                   <label className="text-label ml-1">Intake Grade</label>
-                  <div className="grid grid-cols-2 gap-2 h-20">
+                  <div className="grid grid-cols-2 gap-2 h-16">
                      {["A+", "A", "B", "C"].map((g) => (
-                        <Button key={g} variant="outline" className={cn("h-full rounded-xl font-black text-lg border-border/50", g === 'A+' && "border-success/50 bg-success/10 text-success glow-green")}>
+                        <Button key={g} variant="outline" className={cn("h-full rounded-xl font-black text-sm border-border/50", g === 'A+' && "border-success/50 bg-success/10 text-success glow-green")}>
                           {g}
                         </Button>
                      ))}
@@ -296,7 +308,26 @@ export default function LeafCollectionPage() {
 
             <div className="flex gap-3 pt-6">
                <Button variant="ghost" className="flex-1 h-14 rounded-2xl font-bold" onClick={() => setIsQuickEntryOpen(false)}>Cancel</Button>
-               <Button className="flex-[2] h-14 rounded-2xl font-black text-lg glow-green shadow-xl shadow-primary/20">Submit Intake</Button>
+               <Button 
+                onClick={() => {
+                  const newEntry: LeafEntry = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    farmerName: "New Supplier", // Placeholder
+                    date: TODAY,
+                    collectionTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    batchId: `BTCH-${Math.floor(1000 + Math.random() * 9000)}`,
+                    quantityKg: 45.5, // Placeholder
+                    qualityGrade: "A",
+                    moistureContent: 68,
+                    finePluckingPercentage: 82,
+                    pricePerKg: 245
+                  };
+                  handleAdd(newEntry);
+                }}
+                className="flex-[2] h-14 rounded-2xl font-black text-lg glow-green shadow-xl shadow-primary/20"
+               >
+                 Submit Intake
+               </Button>
             </div>
 
             <div className="flex items-center justify-center pt-8">

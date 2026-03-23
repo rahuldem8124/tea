@@ -1,7 +1,7 @@
 "use client";
 
 import { ActivityItem } from "@/types";
-import { Leaf, BarChart3, Cog, Users, Activity as ActivityIcon } from "lucide-react";
+import { Leaf, Cog, Layers, Archive, Truck, Activity as ActivityIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -15,20 +15,25 @@ const typeConfig: Record<
     color: "text-primary",
     glow: "bg-primary glow-green",
   },
-  sale: {
-    icon: BarChart3,
-    color: "text-blue-500",
-    glow: "bg-blue-500",
-  },
-  machine: {
+  process: {
     icon: Cog,
-    color: "text-warning",
-    glow: "bg-warning glow-yellow",
+    color: "text-blue-400",
+    glow: "bg-blue-400/20",
   },
-  employee: {
-    icon: Users,
-    color: "text-purple-500",
-    glow: "bg-purple-500",
+  grading: {
+    icon: Layers,
+    color: "text-purple-400",
+    glow: "bg-purple-400/20",
+  },
+  packaging: {
+    icon: Archive,
+    color: "text-warning",
+    glow: "bg-warning/20",
+  },
+  logistics: {
+    icon: Truck,
+    color: "text-success",
+    glow: "bg-success/20",
   },
 };
 
