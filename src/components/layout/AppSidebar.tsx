@@ -24,6 +24,7 @@ import {
   Archive,
   Truck,
   Warehouse,
+  Banknote,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,7 @@ const logisticsItems = [
 ];
 
 const adminItems = [
+  { label: "Payments", href: "/payments", icon: Banknote },
   { label: "Employees", href: "/employees", icon: Users },
 ];
 

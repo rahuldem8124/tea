@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { StartBatchModal } from "@/components/modals/StartBatchModal";
+import { FermentationMonitor } from "@/components/processing/FermentationMonitor";
 
 export default function ProcessingPage() {
   const [batches, setBatches] = useState<ProcessingBatch[]>(initialData);
@@ -103,13 +104,9 @@ export default function ProcessingPage() {
           icon={Zap}
           iconClassName="bg-warning/10 text-warning border-warning/20 shadow-none"
         />
-        <KPICard
-          title="FACTORY ENVIRONMENT"
-          value="28°C / 96%"
-          subtitle="Temp & Humidity (Optimal)"
-          icon={Thermometer}
-          iconClassName="bg-teal-500/10 text-teal-500 border-teal-500/20 shadow-none"
-        />
+        <div className="sm:col-span-2">
+          <FermentationMonitor temperature={28} humidity={94} />
+        </div>
       </div>
 
       <div className="space-y-4">

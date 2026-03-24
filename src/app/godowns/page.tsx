@@ -1,129 +1,250 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { godowns as initialData } from "@/lib/data";
-import { Godown } from "@/types";
-import { KPICard } from "@/components/dashboard/KPICard";
-import { Button } from "@/components/ui/button";
-import { Warehouse, MapPin, Database, TrendingUp, MoreVertical, LayoutGrid, Package, Plus } from "lucide-react";
+import { 
+  ShoppingBag, 
+  Package, 
+  AlertCircle, 
+  ArrowRight, 
+  Box, 
+  Layers, 
+  TrendingUp,
+  Search,
+  Filter,
+  Download
+} from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
-import { SectionHeader } from "@/components/ui/section-header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+const GRADES = [
+  { id: "BOP", price: 850 },
+  { id: "BOPF", price: 920 },
+  { id: "FBOP", price: 1100 },
+  { id: "PEKOE", price: 1250 },
+  { id: "Dust 1", price: 780 },
+  { id: "OP", price: 1350 },
+];
+
+const INVENTORY = [
+  { id: "GD-001", grade: "BOP", stock: 2450, reorder: 1000 },
+  { id: "GD-002", grade: "FBOP", stock: 850, reorder: 1000 },
+  { id: "GD-001", grade: "PEKOE", stock: 1200, reorder: 1000 },
+  { id: "GD-003", grade: "Dust 1", stock: 450, reorder: 1000 },
+  { id: "GD-002", grade: "BOPF", stock: 3100, reorder: 1000 },
+  { id: "GD-001", grade: "OP", stock: 750, reorder: 1000 },
+];
 
 export default function GodownsPage() {
-  const [godowns] = useState<Godown[]>(initialData);
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [quantity, setQuantity] = useState("");
 
-  const totalStock = godowns.reduce((acc, g) => acc + g.availableStockKg, 0);
-  const totalCapacity = godowns.reduce((acc, g) => acc + g.receivedQtyKg, 0);
+  const totalPrice = useMemo(() => {
+    const grade = GRADES.find(g => g.id === selectedGrade);
+    if (!grade || !quantity) return 0;
+    return grade.price * parseFloat(quantity);
+  }, [selectedGrade, quantity]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-[1600px] mx-auto space-y-8 pb-20"
-      suppressHydrationWarning
+      className="max-w-[1600px] mx-auto space-y-8 pb-20 px-4 pt-4"
     >
-      <div className="flex items-center justify-between gap-4 flex-wrap">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <Warehouse className="h-5 w-5 text-primary" />
+            <Package className="h-5 w-5 text-primary" />
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
-              Inventory Storage
+              Inventory Management
             </span>
           </div>
           <h1 className="text-4xl font-black tracking-tight text-foreground">
-            Godown <span className="text-primary italic">Management</span>
+            Godown <span className="text-primary italic">& Sales</span>
           </h1>
-          <p className="text-muted-foreground mt-2 font-medium">
-            Monitor stock levels and batch distribution across regional warehouses
-          </p>
         </div>
         <div className="flex items-center gap-3">
-           <Button variant="outline" className="rounded-xl h-12 px-6 font-bold text-sm border-border/60 hover:bg-muted/30 transition-all gap-2">
-              <Database className="h-4 w-4" />
-              Stock Audit
-           </Button>
-           <Button className="rounded-xl h-12 px-6 font-bold text-sm glow-green gap-2">
-              <Plus className="h-5 w-5" />
-              New Godown
-           </Button>
+          <Button variant="outline" className="rounded-xl h-12 px-6 font-bold border-border/50 gap-2">
+            <Download className="h-4 w-4" />
+            Export Report
+          </Button>
+          <Button className="rounded-xl h-12 px-6 font-bold glow-green gap-2 shadow-lg shadow-primary/20">
+            <Box className="h-5 w-5" />
+            Transfer Stock
+          </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <KPICard
-          title="Total Available Stock"
-          value={`${(totalStock / 1000).toFixed(1)} T`}
-          subtitle="Net inventory across all hubs"
-          icon={Package}
-        />
-        <KPICard
-          title="Warehouse Utilization"
-          value={`${((totalStock / totalCapacity) * 100).toFixed(1)}%`}
-          subtitle="Current storage load"
-          icon={TrendingUp}
-          iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none"
-        />
-        <KPICard
-          title="Hubs Active"
-          value={String(godowns.length)}
-          subtitle="Global distribution nodes"
-          icon={MapPin}
-          iconClassName="bg-success/10 text-success border-success/20 shadow-none"
-        />
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <GlassCard className="lg:col-span-1 p-6 h-fit" hoverLift={false}>
+          <div className="flex items-center gap-2 mb-6">
+            <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <ShoppingBag className="h-4 w-4 text-primary" />
+            </div>
+            <h2 className="text-xl font-bold tracking-tight">Retail Point of Sale</h2>
+          </div>
+          
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground pl-1">
+                Tea Grade
+              </label>
+              <Select onValueChange={(value: string | null) => setSelectedGrade(value ?? "")}>
+                <SelectTrigger className="h-12 bg-muted/20 border-border/50 rounded-xl font-medium">
+                  <SelectValue placeholder="Select Grade" />
+                </SelectTrigger>
+                <SelectContent>
+                  {GRADES.map((grade) => (
+                    <SelectItem key={grade.id} value={grade.id} className="font-medium">
+                      {grade.id} - LKR {grade.price}/kg
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-      <div className="space-y-4">
-        <SectionHeader title="Godown Inventory" description="Detailed stock breakdown by location" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           {godowns.map((godown) => (
-             <GlassCard key={godown.id} className="p-6 space-y-6">
-                <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                         <Warehouse className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                         <h4 className="font-black text-sm text-foreground tracking-tight">{godown.name}</h4>
-                         <p className="text-[10px] font-bold text-muted-foreground uppercase">{godown.id}</p>
-                      </div>
-                   </div>
-                   <Button variant="ghost" size="icon-xs">
-                      <MoreVertical className="h-4 w-4" />
-                   </Button>
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground pl-1">
+                Quantity (KG)
+              </label>
+              <Input
+                type="number"
+                placeholder="0.00"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="h-12 bg-muted/20 border-border/50 rounded-xl font-bold text-lg"
+              />
+            </div>
+
+            <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-primary/70">
+                Estimated Total Price
+              </span>
+              <div className="text-3xl font-black tracking-tighter text-primary">
+                LKR {totalPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </div>
+            </div>
+
+            <Button className="w-full h-14 rounded-xl font-black text-sm uppercase tracking-widest gap-2 glow-green shadow-xl shadow-primary/10">
+              Process Sale
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </GlassCard>
+
+        <div className="lg:col-span-2 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-background/40 backdrop-blur-sm border-border/50">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                  <Layers className="h-3 w-3" />
+                  Total Stock
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-black">10,700 kg</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-background/40 backdrop-blur-sm border-border/50">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                  <AlertCircle className="h-3 w-3 text-destructive" />
+                  Low Stock Alerts
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-black text-destructive">3 Grades</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-background/40 backdrop-blur-sm border-border/50">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                  <TrendingUp className="h-3 w-3 text-emerald-500" />
+                  Monthly Sales
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-black">4.2 Tons</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <GlassCard className="p-0 overflow-hidden" hoverLift={false}>
+            <div className="p-6 border-b border-border/50 flex items-center justify-between bg-muted/10">
+              <h3 className="font-bold text-lg">Inventory & Alerts</h3>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search Grade..." className="pl-9 h-10 w-48 bg-background/50 border-border/50 rounded-xl" />
                 </div>
-
-                <div className="space-y-4">
-                   <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                      <span>Inventory Load</span>
-                      <span className="text-foreground">{(godown.availableStockKg / godown.receivedQtyKg * 100).toFixed(0)}%</span>
-                   </div>
-                   <div className="h-2 w-full bg-muted rounded-full overflow-hidden border border-border/30">
-                      <div 
-                        className="h-full bg-primary glow-green transition-all" 
-                        style={{ width: `${(godown.availableStockKg / godown.receivedQtyKg * 100)}%` }} 
-                      />
-                   </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                   <div className="p-3 rounded-2xl bg-muted/30 border border-border/50">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">Available</p>
-                      <p className="text-base font-black text-foreground">{godown.availableStockKg.toLocaleString()}kg</p>
-                   </div>
-                   <div className="p-3 rounded-2xl bg-muted/30 border border-border/50">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-1">Total Received</p>
-                      <p className="text-base font-black text-muted-foreground">{godown.receivedQtyKg.toLocaleString()}kg</p>
-                   </div>
-                </div>
-
-                <Button variant="outline" className="w-full rounded-xl py-5 font-bold text-xs gap-2 border-border/60 hover:bg-primary/5 hover:text-primary transition-all">
-                   <LayoutGrid className="h-4 w-4" />
-                   Review Batches
+                <Button variant="outline" size="icon" className="h-10 w-10 rounded-xl border-border/50">
+                  <Filter className="h-4 w-4" />
                 </Button>
-             </GlassCard>
-           ))}
+              </div>
+            </div>
+            <Table>
+              <TableHeader className="bg-muted/30">
+                <TableRow className="hover:bg-transparent border-border/50">
+                  <TableHead className="w-[120px] font-black text-[10px] uppercase tracking-widest py-4 pl-6 text-muted-foreground">Godown ID</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Tea Grade</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Current Stock</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Reorder Level</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-center">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {INVENTORY.map((item, idx) => {
+                  const isLow = item.stock < item.reorder;
+                  return (
+                    <TableRow 
+                      key={idx} 
+                      className={cn(
+                        "group border-border/40 transition-all",
+                        isLow ? "bg-destructive/5 hover:bg-destructive/10" : "hover:bg-primary/[0.02]"
+                      )}
+                    >
+                      <TableCell className="font-bold pl-6 text-muted-foreground">{item.id}</TableCell>
+                      <TableCell className="font-black text-foreground">{item.grade}</TableCell>
+                      <TableCell className={cn("text-right font-bold font-mono", isLow && "text-destructive")}>
+                        {item.stock.toLocaleString()} kg
+                      </TableCell>
+                      <TableCell className="text-right font-medium text-muted-foreground">{item.reorder.toLocaleString()} kg</TableCell>
+                      <TableCell className="text-center">
+                        {isLow ? (
+                          <Badge variant="destructive" className="rounded-lg font-bold text-[10px] uppercase tracking-widest px-2 py-0.5">
+                            Low Stock
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="rounded-lg font-bold text-[10px] uppercase tracking-widest px-2 py-0.5 border-emerald-500/20 text-emerald-500 bg-emerald-500/10">
+                            Adequate
+                          </Badge>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </GlassCard>
         </div>
       </div>
     </motion.div>
