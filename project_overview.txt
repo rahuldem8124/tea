@@ -1,0 +1,48 @@
+TEA TECH: INTEGRATED FACTORY INTELLIGENCE & COMMERCE SYSTEM
+===========================================================
+
+PROJECT OVERVIEW
+----------------
+This platform is a comprehensive, production-grade solution designed to modernize the end-to-end operations of a tea factory. It bridges the gap between industrial processing and digital commerce through a high-performance, real-time interface.
+
+CORE WORKFLOW & CAPABILITIES
+---------------------------
+
+1. RAW LEAF INTAKE (THE SOURCE)
+Detailed tracking of leaf collection from farmers. Each entry captures weight, moisture content, and quality grading (Fine Plucking %) to ensure the highest standards from the start.
+
+2. PRECISION PROCESSING
+A live production pipeline that monitors batches through every stage: Withering, Rolling, Fermentation, and Drying. 
+* Integrated "Fermentation Monitor" provides real-time environmental data (Temperature/Humidity) with status alerts to maintain optimal conditions.
+
+3. QUALITY GRADING & PACKAGING
+Post-production analysis where tea is categorized into market grades (BOP, PEKOE, etc.). The system tracks "Outturn Percentage" and "Waste Monitoring" to optimize factory efficiency.
+
+4. LOGISTICS & SUPPLY CHAIN
+A GPS-independent dispatch board tracks truck movements from the factory to regional godowns. Real-time status updates (In-Transit, Delayed, Delivered) provide full visibility into the distribution network.
+
+5. GODOWN & INVENTORY MANAGEMENT
+Regional warehouse monitoring with automated "Low Stock" alerts. Includes a "Retail POS" interface for direct sales and inventory adjustments.
+
+6. FINANCIAL MANAGEMENT
+A centralized ledger handles dual-flow accounting:
+* Farmer Payouts: Processing payments for raw leaf based on weight and quality.
+* Buyer Invoices: Managing bulk sales and revenue tracking.
+* Micro-loans: Issuing and tracking advance payments/advances to farmers.
+
+7. THE CLIENT PORTAL (B2C COMMERCE)
+A premium, customer-facing digital storefront.
+* Product Catalog: Visual browsing of tea grades with detailed descriptions.
+* Shopping Experience: Seamless cart management and secure checkout flow.
+* Customer Dashboard: Order history and real-time shipment tracking for buyers.
+
+TECHNICAL ARCHITECTURE
+----------------------
+* Frontend: Next.js 15 & React 19 (Server-side rendering for speed and SEO).
+* Design: Tailwind CSS 4 with a "Glassmorphism" aesthetic for a premium, futuristic feel.
+* Data: Recharts for real-time production trends and lucrative financial analytics.
+* Performance: Optimized with Framer Motion for smooth, high-end micro-interactions.
+
+SUMMARY
+-------
+This is not just a dashboard; it is an Operating System for the modern tea industry, designed to maximize yield, minimize waste, and provide a world-class buying experience for clients.

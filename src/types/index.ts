@@ -149,3 +149,26 @@ export interface ChartDataPoint {
   processed: number;
   dispatched: number;
 }
+
+export interface PortalProduct {
+  id: string;
+  name: string;
+  grade: TeaGrade;
+  description: string;
+  pricePerKg: number;
+  image: string;
+  stockStatus: "in-stock" | "low-stock" | "out-of-stock";
+}
+
+export interface PortalOrder {
+  id: string;
+  date: string;
+  items: {
+    productId: string;
+    productName: string;
+    quantity: number;
+    price: number;
+  }[];
+  total: number;
+  status: "processing" | "shipped" | "delivered" | "cancelled";
+}

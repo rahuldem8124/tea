@@ -11,6 +11,8 @@ import {
   KPIData,
   ActivityItem,
   ChartDataPoint,
+  PortalProduct,
+  PortalOrder,
 } from "@/types";
 
 export const leafEntries: LeafEntry[] = [
@@ -119,4 +121,14 @@ export const dailyChartData: ChartDataPoint[] = [
   { date: "Mar 21", collection: 1150, processed: 1100, dispatched: 1050 },
   { date: "Mar 22", collection: 870, processed: 840, dispatched: 800 },
   { date: "Mar 23", collection: 745, processed: 700, dispatched: 650 },
+];
+
+export const portalProducts: PortalProduct[] = [
+  { id: "P001", name: "Premium Broken Orange Pekoe", grade: "BOP", description: "Fine grade tea with a robust flavor and rich aroma.", pricePerKg: 850, image: "https://images.unsplash.com/photo-1544784703-352d03ad53bc?w=800", stockStatus: "in-stock" },
+  { id: "P002", name: "Flowery Broken Orange Pekoe", grade: "FBOP", description: "Longer leaves with a delicate, flowery fragrance.", pricePerKg: 1100, image: "https://images.unsplash.com/photo-1594631252845-59fc59739e83?w=800", stockStatus: "in-stock" },
+  { id: "P003", name: "Silver Tips Special", grade: "PEKOE", description: "Exotic hand-picked buds with a subtle silvery sheen.", pricePerKg: 2500, image: "https://images.unsplash.com/photo-1563911191470-85110056506a?w=800", stockStatus: "low-stock" },
+];
+
+export const portalOrders: PortalOrder[] = [
+  { id: "ORD-9901", date: "2026-03-24", total: 4250, status: "processing", items: [{ productId: "P001", productName: "BOP", quantity: 5, price: 850 }] },
 ];

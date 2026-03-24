@@ -1,0 +1,54 @@
+TEA TECH: OPERATION MANUAL & TECHNICAL WORKFLOW
+==============================================
+
+This document details the functional flow, implementation strategy, and usage guidelines for each module of the Tea Factory Intelligence System.
+
+---
+
+1. EXECUTIVE DASHBOARD (THE NERVE CENTER)
+- How we did it: Built with a grid of Shadcn 'KPICards' and responsive Recharts components. We used Framer Motion for smooth entry animations.
+- The Flow: Aggregates real-time data from all other modules (Intake, Processing, Sales) into a single visual context.
+- How to use it: Monitor the 'Live Process Pipeline' for bottleneck detection. Use the 'Generate Report' button to export daily performance snapshots.
+
+2. LEAF COLLECTION (INTAKE CONTROL)
+- How we did it: Implemented using a high-density data table with quick-action modals for data entry.
+- The Flow: Raw leaf arrival -> Quality testing (moisture/fine plucking) -> Weight recording -> Automated unit price calculation based on grade.
+- How to use it: Use the 'Record Collection' button to log new leaf deliveries. Filter by farmer name to review historical intake quality.
+
+3. PROCESSING & FERMENTATION (THE PRODUCTION LINE)
+- How we did it: Featured a custom 'Fermentation Monitor' with a SVG-based status bar and Recharts AreaChart for environmental trending.
+- The Flow: Collected leaf -> Batch creation -> Withering -> Rolling -> Fermentation (Real-time monitoring) -> Drying.
+- How to use it: Click 'Start New Batch' to assign a batch ID to a machine. Watch the 'Fermentation Monitor' for 'Critical/Warning' status alerts if temperature drifts.
+
+4. GRADING & PACKAGING (QUALITY ASSURANCE)
+- How we did it: Used custom Badge components for grade visualization and a 'Waste Tracker' to monitor outturn efficiency.
+- The Flow: Dried tea -> Sorting into grades (BOP, PEKOE, etc.) -> Weight reconciliation -> Sealing into bags/boxes.
+- How to use it: Record final grading weights for each batch. If waste exceeds 3%, investigate the drying or sorting stage for issues.
+
+5. LOGISTICS & DISTRIBUTION (THE SUPPLY CHAIN)
+- How we did it: Created a 'Dispatch Board' using Lucide's Truck icons and status-based conditional rendering (Green/Yellow/Red).
+- The Flow: Finished product -> Dispatch assignment -> Truck loading -> In-transit monitoring -> Delivery Confirmation.
+- How to use it: Click 'Dispatch Truck' to assign a driver and destination. Monitor the 'Estimated vs. Actual' time to identify delivery delays.
+
+6. GODOWNS & RETAIL POINT OF SALE
+- How we did it: A combined interface using a Shadcn Form for sales and a Table with light-red conditional formatting for 'Low Stock' warnings.
+- The Flow: Stock arrival from factory -> Inventory update -> Retail sale processing -> Automatic stock deduction.
+- How to use it: Use the 'Retail Point of Sale' section for over-the-counter sales. If a row in the 'Inventory' table turns red, initiate a stock transfer from the main factory.
+
+7. PAYMENT MANAGEMENT (THE FINANCIAL ENGINE)
+- How we did it: Implemented a tabbed 'Transaction Ledger' (Shadcn Tabs) with a Dialog-based modal for micro-loans.
+- The Flow: Intake records -> Pending payouts -> Payment processing -> Receipt generation.
+- How to use it: Switch between 'Farmer Payouts' and 'Buyer Invoices' tabs to manage cash flow. Use 'Record Advance Payment' to issue interest-free loans for fertilizer/equipment.
+
+8. CLIENT PORTAL (THE DIGITAL STOREFRONT)
+- How we did it: A completely independent shopping experience with its own layout (`/portal`). Used high-quality Unsplash imagery and glassmorphism cards.
+- The Flow: Catalog browsing -> Add to Cart (Sonner toast confirmation) -> Secure checkout -> Order tracking.
+- How to use it: Customers browse the 'Catalog', manage their 'Shopping Bag', and track their orders through the 'My Orders' history dashboard.
+
+---
+
+TECHNICAL STANDARDS
+- Frontend: Next.js 15 (App Router) + React 19.
+- Styling: Tailwind CSS 4 with Glassmorphism (Backdrop-blur-xl).
+- Type Safety: Full TypeScript implementation across all data models.
+- Interactivity: Zero-latency interactions via client-side state management.
