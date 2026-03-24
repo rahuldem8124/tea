@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { truckDispatches as initialData } from "@/lib/data";
 import { TruckDispatch, TruckStatus } from "@/types";
@@ -58,6 +59,13 @@ export default function LogisticsPage() {
       case "delivered": return "w-full";
       default: return "w-0";
     }
+  };
+
+  const getTruckImage = (status: TruckStatus) => {
+    if (status === "loading" || status === "delivered") {
+      return "/images/truck-black.png";
+    }
+    return "/images/truck-green.png";
   };
 
   return (
@@ -205,16 +213,37 @@ export default function LogisticsPage() {
                               <span>Road</span>
                               <span>Godown</span>
                            </div>
-                           <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden relative border border-border/40">
-                              <div className={cn("h-full bg-primary transition-all duration-1000", getProgressWidth(truck.status))} />
-                              <div className={cn(
-                                "absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full border-2 border-background shadow-sm transition-all duration-1000",
-                                truck.status === "loading" ? "left-[10%]" : 
-                                truck.status === "dispatched" ? "left-[30%]" :
-                                truck.status === "in_transit" ? "left-[65%]" : "left-[98%]",
-                                truck.status === "delivered" ? "bg-success" : "bg-primary"
-                              )} />
-                           </div>
+                            <div className="relative pt-6 pb-2">
+                               <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden relative border border-border/40">
+                                  <div className={cn("h-full bg-primary transition-all duration-1000", getProgressWidth(truck.status))} />
+                               </div>
+                               <motion.div 
+                                 className="absolute top-0 -translate-y-[15%] z-10 transition-all duration-1000 ease-in-out pointer-events-none"
+                                 initial={false}
+                                 animate={{ 
+                                   left: truck.status === "loading" ? "10%" : 
+                                          truck.status === "dispatched" ? "30%" :
+                                          truck.status === "in_transit" ? "65%" : "95%"
+                                 }}
+                               >
+                                 <div className="relative -ml-6">
+                                   <Image 
+                                     src={getTruckImage(truck.status)} 
+                                     alt="truck" 
+                                     width={48} 
+                                     height={24} 
+                                     className="object-contain drop-shadow-lg"
+                                   />
+                                   {truck.status === "in_transit" && (
+                                     <motion.div 
+                                       animate={{ opacity: [0, 1, 0], x: [-5, -15] }}
+                                       transition={{ repeat: Infinity, duration: 1.5 }}
+                                       className="absolute -left-2 top-1/2 -translate-y-1/2 h-0.5 w-3 bg-primary/40 rounded-full"
+                                     />
+                                   )}
+                                 </div>
+                               </motion.div>
+                            </div>
                          </div>
                       </TableCell>
                       <TableCell className="text-center">
