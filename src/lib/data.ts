@@ -47,7 +47,22 @@ export const truckDispatches: TruckDispatch[] = [
     loadDetails: [{ batchId: "BT-1000", grade: "Grade A", quantity: 150 }], 
     departureTime: "02:00 PM", 
     estimatedArrivalTime: "06:00 PM", 
-    status: "in_transit" 
+    status: "in_transit",
+    tripHistory: [
+      { tripId: "T-101", destination: "Colombo", departureTime: "08:00 AM", arrivalTime: "12:00 PM", status: "on-time" },
+      { tripId: "T-098", destination: "Negombo", departureTime: "10:00 AM", arrivalTime: "02:30 PM", status: "delayed" }
+    ]
+  },
+  { 
+    id: "TR-502", 
+    truckId: "LP-9910", 
+    driverName: "Rajiva Silva", 
+    destinationGodown: "Kandy Distribution", 
+    loadDetails: [{ batchId: "BT-1001", grade: "Grade A", quantity: 300 }], 
+    departureTime: "09:00 AM", 
+    estimatedArrivalTime: "11:30 AM", 
+    status: "delayed",
+    tripHistory: []
   },
   { 
     id: "TR-500", 
@@ -57,7 +72,11 @@ export const truckDispatches: TruckDispatch[] = [
     loadDetails: [{ batchId: "BT-999", grade: "Grade B", quantity: 200 }], 
     departureTime: "08:00 AM", 
     estimatedArrivalTime: "11:00 AM", 
-    status: "delivered" 
+    actualArrivalTime: "10:45 AM",
+    status: "delivered",
+    tripHistory: [
+      { tripId: "T-100", destination: "Galle", departureTime: "08:00 AM", arrivalTime: "11:00 AM", status: "on-time" }
+    ]
   },
 ];
 

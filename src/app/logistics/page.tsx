@@ -23,6 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { DispatchTruckModal } from "@/components/modals/DispatchTruckModal";
+import { AlertCircle, ArrowRight, ShieldAlert } from "lucide-react";
 
 export default function LogisticsPage() {
   const [dispatches, setDispatches] = useState<TruckDispatch[]>(initialData);
@@ -31,9 +32,8 @@ export default function LogisticsPage() {
 
   const inTransitCount = dispatches.filter(d => d.status === "in_transit").length;
   const deliveredCount = dispatches.filter(d => d.status === "delivered").length;
-  const totalWeight = dispatches.reduce((acc, d) => 
-    acc + d.loadDetails.reduce((sum, item) => sum + item.quantity, 0), 0
-  );
+  const delayedCount = dispatches.filter(d => d.status === "delayed").length;
+  
 
   const filteredDispatches = dispatches.filter(d => 
     d.truckId.toLowerCase().includes(search.toLowerCase()) ||
@@ -41,12 +41,23 @@ export default function LogisticsPage() {
     d.destinationGodown.toLowerCase().includes(search.toLowerCase())
   );
 
+  const updateStatus = (id: string, newStatus: TruckStatus) => {
+    setDispatches(prev => prev.map(d => 
+      d.id === id ? { 
+        ...d, 
+        status: newStatus,
+        actualArrivalTime: newStatus === "delivered" ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : d.actualArrivalTime
+      } : d
+    ));
+  };
+
   const getStatusColor = (status: TruckStatus) => {
     switch (status) {
       case "loading": return "text-warning border-warning/30 bg-warning/5";
       case "dispatched": return "text-blue-500 border-blue-500/30 bg-blue-500/5";
       case "in_transit": return "text-chart-2 border-chart-2/30 bg-chart-2/5";
       case "delivered": return "text-success border-success/30 bg-success/5";
+      case "delayed": return "text-destructive border-destructive/30 bg-destructive/5 glow-red";
       default: return "";
     }
   };
@@ -57,16 +68,21 @@ export default function LogisticsPage() {
       case "dispatched": return "w-[30%]";
       case "in_transit": return "w-[65%]";
       case "delivered": return "w-full";
+      case "delayed": return "w-[65%]";
       default: return "w-0";
     }
   };
 
   const getTruckImage = (status: TruckStatus) => {
+    if (status === "delayed") {
+      return "/images/truck-red.png";
+    }
     if (status === "loading" || status === "delivered") {
       return "/images/truck-black.png";
     }
     return "/images/truck-green.png";
   };
+
 
   return (
     <motion.div
@@ -121,11 +137,11 @@ export default function LogisticsPage() {
           iconClassName="bg-success/10 text-success border-success/20 shadow-none"
         />
         <KPICard
-          title="Total Dispatched"
-          value={`${(totalWeight / 1000).toFixed(1)} Tons`}
-          subtitle="Cumulative volume"
-          icon={Navigation}
-          iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none"
+          title="Delayed Trucks"
+          value={String(delayedCount)}
+          subtitle="Requires attention"
+          icon={AlertCircle}
+          iconClassName={cn(delayedCount > 0 ? "bg-destructive/10 text-destructive border-destructive/20 shadow-lg shadow-destructive/20" : "bg-muted text-muted-foreground")}
         />
         <KPICard
           title="Avg Delivery Time"
@@ -135,6 +151,35 @@ export default function LogisticsPage() {
           iconClassName="bg-warning/10 text-warning border-warning/20 shadow-none"
         />
       </div>
+
+      {delayedCount > 0 && (
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="bg-destructive/10 border border-destructive/20 p-6 rounded-3xl relative overflow-hidden group hover:bg-destructive/15 transition-all shadow-[0_0_30px_rgba(239,68,68,0.1)]"
+        >
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-2xl bg-destructive/20 flex items-center justify-center border border-destructive/30 glow-red">
+                <ShieldAlert className="h-6 w-6 text-destructive" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-foreground tracking-tight flex items-center gap-2">
+                  Active Logistics Alerts
+                  <Badge variant="destructive" className="h-5 px-1.5 text-[9px] font-black uppercase tracking-widest">{delayedCount} CRITICAL</Badge>
+                </h3>
+                <p className="text-sm font-medium text-muted-foreground/80 mt-1">
+                  System detected {delayedCount} truck{delayedCount > 1 ? 's' : ''} with significant arrival delays. Operational intervention required.
+                </p>
+              </div>
+            </div>
+            <Button variant="outline" className="rounded-xl border-destructive/20 text-destructive hover:bg-destructive hover:text-white font-bold transition-all px-6">
+              Investigate All Alerts
+            </Button>
+          </div>
+          <div className="absolute -right-20 -top-20 h-40 w-40 bg-destructive/5 blur-[80px] rounded-full group-hover:bg-destructive/10 transition-colors" />
+        </motion.div>
+      )}
 
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-4 py-2">
@@ -164,10 +209,9 @@ export default function LogisticsPage() {
                 <TableRow className="border-b border-border/50 hover:bg-transparent bg-muted/10">
                   <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 h-14">Truck & Driver</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Destination</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Load Details</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Timeline</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Tracking Timeline</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14 text-center">Status</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Arrival Est.</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -197,21 +241,12 @@ export default function LogisticsPage() {
                            <span className="text-xs font-bold text-foreground italic">{truck.destinationGodown}</span>
                          </div>
                       </TableCell>
-                      <TableCell>
-                         <div className="flex flex-col gap-1">
-                           {truck.loadDetails.map((load, i) => (
-                             <span key={i} className="text-[10px] font-bold text-muted-foreground">
-                               {load.batchId} • <span className="text-primary">{load.grade}</span> • {load.quantity}kg
-                             </span>
-                           ))}
-                         </div>
-                      </TableCell>
-                      <TableCell className="min-w-[200px]">
+                      <TableCell className="min-w-[300px]">
                          <div className="space-y-2">
                            <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-muted-foreground px-1">
-                              <span>Factory</span>
-                              <span>Road</span>
-                              <span>Godown</span>
+                               <span>Factory</span>
+                               <span>Road</span>
+                               <span>Godown</span>
                            </div>
                             <div className="relative pt-6 pb-2">
                                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden relative border border-border/40">
@@ -223,7 +258,7 @@ export default function LogisticsPage() {
                                  animate={{ 
                                    left: truck.status === "loading" ? "10%" : 
                                           truck.status === "dispatched" ? "30%" :
-                                          truck.status === "in_transit" ? "65%" : "95%"
+                                          truck.status === "in_transit" || truck.status === "delayed" ? "65%" : "95%"
                                  }}
                                >
                                  <div className="relative -ml-6">
@@ -234,7 +269,7 @@ export default function LogisticsPage() {
                                      height={24} 
                                      className="object-contain drop-shadow-lg"
                                    />
-                                   {truck.status === "in_transit" && (
+                                   {(truck.status === "in_transit" || truck.status === "delayed") && (
                                      <motion.div 
                                        animate={{ opacity: [0, 1, 0], x: [-5, -15] }}
                                        transition={{ repeat: Infinity, duration: 1.5 }}
@@ -247,14 +282,48 @@ export default function LogisticsPage() {
                          </div>
                       </TableCell>
                       <TableCell className="text-center">
-                         <Badge variant="outline" className={cn("text-[9px] font-black px-2 py-0.5 uppercase tracking-widest", getStatusColor(truck.status))}>
-                            {truck.status.replace('_', ' ')}
-                         </Badge>
+                         <div className="flex flex-col items-center gap-1">
+                            <Badge variant="outline" className={cn("text-[9px] font-black px-2 py-0.5 uppercase tracking-widest", getStatusColor(truck.status))}>
+                                {truck.status.replace('_', ' ')}
+                            </Badge>
+                            {truck.status === "delayed" && (
+                              <span className="text-[8px] font-black text-destructive uppercase flex items-center gap-1">
+                                <ShieldAlert className="h-2.5 w-2.5" />
+                                Overdue
+                              </span>
+                            )}
+                         </div>
                       </TableCell>
                       <TableCell className="text-right pr-6">
-                         <div className="inline-flex flex-col items-end">
-                            <span className="text-sm font-black text-foreground">{truck.estimatedArrivalTime}</span>
-                            <span className="text-[9px] font-bold text-muted-foreground opacity-60">Dep: {truck.departureTime}</span>
+                         <div className="flex items-center justify-end gap-2">
+                            {truck.status === "loading" && (
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="h-8 rounded-lg text-[10px] font-black uppercase gap-2 hover:bg-blue-500/10 border-blue-500/20 text-blue-500"
+                                onClick={() => updateStatus(truck.id, "dispatched")}
+                              >
+                                <Navigation className="h-3 w-3" />
+                                Dispatch
+                              </Button>
+                            )}
+                            {(truck.status === "dispatched" || truck.status === "in_transit" || truck.status === "delayed") && (
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="h-8 rounded-lg text-[10px] font-black uppercase gap-2 hover:bg-success/10 border-success/20 text-success"
+                                onClick={() => updateStatus(truck.id, "delivered")}
+                              >
+                                <CheckCircle2 className="h-3 w-3" />
+                                Deliver
+                              </Button>
+                            )}
+                            {truck.status === "delivered" && (
+                              <div className="pr-4 py-2 flex flex-col items-end">
+                                <span className="text-[10px] font-black text-muted-foreground uppercase opacity-40">Complete</span>
+                                <span className="text-[9px] font-bold text-success italic">{truck.actualArrivalTime}</span>
+                              </div>
+                            )}
                          </div>
                       </TableCell>
                     </motion.tr>
@@ -265,10 +334,69 @@ export default function LogisticsPage() {
           </div>
         </GlassCard>
       </div>
+      <div className="space-y-6 pt-4">
+        <SectionHeader 
+          title="Archive & Trip History" 
+          description="View completed delivery logs and past truck movements" 
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dispatches.map(truck => (
+            <GlassCard key={truck.id} className="p-6 border-border/40 hover:border-primary/30 transition-all group">
+               <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                     <div className="h-10 w-10 rounded-xl bg-muted/50 flex items-center justify-center border border-border/50 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all">
+                        <Truck className="h-5 w-5 text-muted-foreground group-hover:text-primary" />
+                     </div>
+                     <div>
+                        <p className="text-sm font-black tracking-tight">{truck.truckId}</p>
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase">{truck.driverName}</p>
+                     </div>
+                  </div>
+                  <Badge variant="secondary" className="text-[9px] font-black uppercase tracking-widest opacity-60">
+                    {truck.tripHistory?.length || 0} Trips
+                  </Badge>
+               </div>
+               
+               <div className="space-y-3">
+                  {truck.tripHistory?.slice(0, 2).map((trip, i) => (
+                    <div key={i} className="p-3 rounded-xl bg-muted/20 border border-border/30 flex items-center justify-between text-xs transition-all hover:bg-muted/30">
+                       <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                             <span className="font-black text-foreground">{trip.destination}</span>
+                             <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                             <span className="font-bold text-muted-foreground">{trip.arrivalTime}</span>
+                          </div>
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{trip.tripId} • {trip.departureTime}</p>
+                       </div>
+                       <Badge className={cn(
+                         "text-[8px] font-black uppercase px-2 py-0",
+                         trip.status === "on-time" ? "bg-success/10 text-success border-success/20" : "bg-destructive/10 text-destructive border-destructive/20"
+                       )}>
+                         {trip.status}
+                       </Badge>
+                    </div>
+                  ))}
+                  {(!truck.tripHistory || truck.tripHistory.length === 0) && (
+                    <div className="py-8 text-center border-2 border-dashed border-border/30 rounded-2xl">
+                       <p className="text-[10px] font-bold text-muted-foreground italic uppercase">No trip history records</p>
+                    </div>
+                  )}
+               </div>
+               
+               {truck.tripHistory && truck.tripHistory.length > 2 && (
+                 <Button variant="ghost" className="w-full mt-4 h-9 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-primary/10 rounded-xl">
+                   View Full History
+                 </Button>
+               )}
+            </GlassCard>
+          ))}
+        </div>
+      </div>
+
       <DispatchTruckModal 
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        onAdd={(dispatch) => setDispatches(prev => [dispatch, ...prev])}
+        onAdd={(dispatch) => setDispatches(prev => [{...dispatch, tripHistory: []}, ...prev])}
       />
     </motion.div>
   );

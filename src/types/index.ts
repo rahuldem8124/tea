@@ -80,7 +80,15 @@ export interface PackagingRecord {
   totalPackages: number;
 }
 
-export type TruckStatus = "loading" | "dispatched" | "in_transit" | "delivered";
+export type TruckStatus = "loading" | "dispatched" | "in_transit" | "delivered" | "delayed";
+
+export interface TripHistoryItem {
+  tripId: string;
+  destination: string;
+  departureTime: string;
+  arrivalTime: string;
+  status: "on-time" | "delayed";
+}
 
 export interface TruckDispatch {
   id: string;
@@ -94,7 +102,9 @@ export interface TruckDispatch {
   }[];
   departureTime: string;
   estimatedArrivalTime: string;
+  actualArrivalTime?: string;
   status: TruckStatus;
+  tripHistory?: TripHistoryItem[];
 }
 
 export interface Godown {
