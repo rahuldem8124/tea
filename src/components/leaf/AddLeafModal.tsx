@@ -91,37 +91,17 @@ export function AddLeafModal({ open, onOpenChange, onAdd }: AddLeafModalProps) {
               onChange={(e) => setDate(e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="quantity">Quantity (kg) *</Label>
-              <Input
-                id="quantity"
-                type="number"
-                min="0"
-                step="0.1"
-                placeholder="0"
-                value={quantityKg}
-                onChange={(e) => setQuantityKg(e.target.value)}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Quality Grade</Label>
-              <Select
-                value={qualityGrade}
-                onValueChange={(v) => setQualityGrade((v ?? qualityGrade) as QualityGrade)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {grades.map((g) => (
-                    <SelectItem key={g} value={g}>
-                      {g} — Rs. {priceMap[g]}/kg
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="quantity">Quantity (kg) *</Label>
+            <Input
+              id="quantity"
+              type="number"
+              min="0"
+              step="0.1"
+              placeholder="0"
+              value={quantityKg}
+              onChange={(e) => setQuantityKg(e.target.value)}
+            />
           </div>
           {quantityKg && (
             <div className="rounded-lg bg-muted/50 px-4 py-3 text-sm">

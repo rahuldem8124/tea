@@ -33,9 +33,11 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
   const [gradeA, setGradeA] = React.useState("");
   const [gradeB, setGradeB] = React.useState("");
   const [gradeC, setGradeC] = React.useState("");
+  const [waste, setWaste] = React.useState("");
 
   const selectedBatch = processingBatches.find((b) => b.id === batchId);
   const totalGraded = Number(gradeA) + Number(gradeB) + Number(gradeC);
+  const totalInput = totalGraded + Number(waste);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +48,7 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
         gradeA: Number(gradeA),
         gradeB: Number(gradeB),
         gradeC: Number(gradeC),
+        waste: Number(waste),
       },
       date: new Date().toISOString().split("T")[0],
     };
@@ -73,7 +76,7 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
           <div className="space-y-4">
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">Processed Batch</Label>
             <Select value={batchId} onValueChange={(val) => setBatchId(val || "")}>
-              <SelectTrigger className="h-14 rounded-2xl bg-muted/30 border-border/50 font-bold">
+              <SelectTrigger className="h-14 rounded-2xl bg-muted/30 border-border/50 font-bold text-sm">
                 <SelectValue placeholder="Select completed batch..." />
               </SelectTrigger>
               <SelectContent className="glass-panel border-border/50 rounded-xl">
@@ -86,35 +89,45 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
             </Select>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
-             <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-success/60 ml-1 text-center block">Grade A</Label>
+          <div className="grid grid-cols-4 gap-2">
+             <div className="space-y-2">
+                <Label className="text-[9px] font-black uppercase tracking-tighter text-success/60 text-center block">Grade A</Label>
                 <Input 
                   type="number" 
-                  placeholder="00"
+                  placeholder="0"
                   value={gradeA}
                   onChange={(e) => setGradeA(e.target.value)}
-                  className="h-16 text-xl font-black text-center rounded-2xl bg-success/5 border-success/20 text-success focus-visible:ring-success/30"
+                  className="h-14 text-lg font-black text-center rounded-xl bg-success/5 border-success/20 text-success focus-visible:ring-success/30"
                 />
              </div>
-             <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-primary/60 ml-1 text-center block">Grade B</Label>
+             <div className="space-y-2">
+                <Label className="text-[9px] font-black uppercase tracking-tighter text-primary/60 text-center block">Grade B</Label>
                 <Input 
                   type="number" 
-                  placeholder="00"
+                  placeholder="0"
                   value={gradeB}
                   onChange={(e) => setGradeB(e.target.value)}
-                  className="h-16 text-xl font-black text-center rounded-2xl bg-primary/5 border-primary/20 text-primary focus-visible:ring-primary/30"
+                  className="h-14 text-lg font-black text-center rounded-xl bg-primary/5 border-primary/20 text-primary focus-visible:ring-primary/30"
                 />
              </div>
-             <div className="space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-warning/60 ml-1 text-center block">Grade C</Label>
+             <div className="space-y-2">
+                <Label className="text-[9px] font-black uppercase tracking-tighter text-warning/60 text-center block">Grade C</Label>
                 <Input 
                   type="number" 
-                  placeholder="00"
+                  placeholder="0"
                   value={gradeC}
                   onChange={(e) => setGradeC(e.target.value)}
-                  className="h-16 text-xl font-black text-center rounded-2xl bg-warning/5 border-warning/20 text-warning focus-visible:ring-warning/30"
+                  className="h-14 text-lg font-black text-center rounded-xl bg-warning/5 border-warning/20 text-warning focus-visible:ring-warning/30"
+                />
+             </div>
+             <div className="space-y-2">
+                <Label className="text-[9px] font-black uppercase tracking-tighter text-destructive/60 text-center block">Waste</Label>
+                <Input 
+                  type="number" 
+                  placeholder="0"
+                  value={waste}
+                  onChange={(e) => setWaste(e.target.value)}
+                  className="h-14 text-lg font-black text-center rounded-xl bg-destructive/5 border-destructive/20 text-destructive focus-visible:ring-destructive/30"
                 />
              </div>
           </div>
@@ -122,15 +135,15 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
           <div className="p-4 rounded-2xl bg-muted/30 border border-border/50">
              <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">
                 <span>Verification</span>
-                <span>{selectedBatch ? `${totalGraded} / ${selectedBatch.outputQtyKg || 0} kg` : "—"}</span>
+                <span>{selectedBatch ? `${totalInput} / ${selectedBatch.outputQtyKg || 0} kg` : "—"}</span>
              </div>
              <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                 <div 
                   className={cn(
                     "h-full transition-all", 
-                    selectedBatch && selectedBatch.outputQtyKg && totalGraded > selectedBatch.outputQtyKg ? "bg-destructive w-full" : "bg-primary"
+                    selectedBatch && selectedBatch.outputQtyKg && totalInput > selectedBatch.outputQtyKg ? "bg-destructive w-full" : "bg-primary"
                   )} 
-                  style={{ width: selectedBatch && selectedBatch.outputQtyKg ? `${Math.min(100, (totalGraded / selectedBatch.outputQtyKg) * 100)}%` : '0%' }}
+                  style={{ width: selectedBatch && selectedBatch.outputQtyKg ? `${Math.min(100, (totalInput / selectedBatch.outputQtyKg) * 100)}%` : '0%' }}
                 />
              </div>
           </div>
@@ -138,8 +151,8 @@ export function AddGradingModal({ open, onOpenChange, onAdd }: AddGradingModalPr
           <div className="pt-2">
             <Button 
               type="submit" 
-              disabled={!batchId || totalGraded === 0 || !!(selectedBatch && selectedBatch.outputQtyKg && totalGraded > selectedBatch.outputQtyKg)}
-              className="w-full h-14 rounded-2xl font-black text-lg bg-purple-500 hover:bg-purple-600 text-white shadow-xl shadow-purple-500/20 transition-all active:scale-95 disabled:grayscale"
+              disabled={!batchId || totalInput === 0 || !!(selectedBatch && selectedBatch.outputQtyKg && totalInput > selectedBatch.outputQtyKg)}
+              className="w-full h-14 rounded-2xl font-black text-lg bg-indigo-500 hover:bg-indigo-600 text-white shadow-xl shadow-indigo-500/20 transition-all active:scale-95 disabled:grayscale"
             >
                Approve Grading <ArrowRight className="ml-2 h-5 w-5" />
             </Button>

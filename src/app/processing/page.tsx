@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Zap, Play, CheckCircle2, Plus, Search, Filter, ArrowRight, Activity, TrendingDown } from "lucide-react";
+import { Zap, Play, CheckCircle2, Plus, Search, Filter, ArrowRight, Activity, TrendingDown, Thermometer } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -74,7 +74,7 @@ export default function ProcessingPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-5">
         <KPICard
           title="Active Batches"
           value={String(activeCount)}
@@ -102,6 +102,13 @@ export default function ProcessingPage() {
           subtitle="Optimal efficiency"
           icon={Zap}
           iconClassName="bg-warning/10 text-warning border-warning/20 shadow-none"
+        />
+        <KPICard
+          title="FACTORY ENVIRONMENT"
+          value="28°C / 96%"
+          subtitle="Temp & Humidity (Optimal)"
+          icon={Thermometer}
+          iconClassName="bg-teal-500/10 text-teal-500 border-teal-500/20 shadow-none"
         />
       </div>
 
@@ -147,7 +154,7 @@ export default function ProcessingPage() {
                 {filteredBatches.map((batch) => {
                   const machine = machines.find(m => m.id === batch.machineId);
                   return (
-                    <TableRow key={batch.id} className="group border-border/40 hover:bg-primary/[0.02] transition-colors">
+                    <TableRow key={batch.id} className="group border-border/40 hover:bg-primary/[0.02] transition-all">
                       <TableCell className="font-bold pl-6">{batch.id}</TableCell>
                       <TableCell>
                         <div className="flex flex-col">

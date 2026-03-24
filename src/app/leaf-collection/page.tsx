@@ -267,24 +267,12 @@ export default function LeafCollectionPage() {
                </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-4">
-                  <label className="text-label ml-1">Fine Plucking (%)</label>
-                  <Input type="number" placeholder="80" className="h-16 text-2xl font-black text-center rounded-2xl bg-chart-2/5 border-chart-2/20 text-chart-2" />
-               </div>
-               <div className="space-y-4">
-                  <label className="text-label ml-1">Intake Grade</label>
-                  <div className="grid grid-cols-2 gap-2 h-16">
-                     {["A+", "A", "B", "C"].map((g) => (
-                        <Button key={g} variant="outline" className={cn("h-full rounded-xl font-black text-sm border-border/50", g === 'A+' && "border-success/50 bg-success/10 text-success glow-green")}>
-                          {g}
-                        </Button>
-                     ))}
-                  </div>
-               </div>
-            </div>
+             <div className="space-y-4">
+                <label className="text-label ml-1">Fine Plucking (%)</label>
+                <Input type="number" placeholder="80" className="h-16 text-2xl font-black text-center rounded-2xl bg-chart-2/5 border-chart-2/20 text-chart-2" />
+             </div>
 
-            <div className="p-6 rounded-3xl bg-muted/20 border border-border/50 space-y-4">
+             <div className="p-6 rounded-3xl bg-muted/20 border border-border/50 space-y-4">
                <div className="flex items-center justify-between">
                   <span className="text-sm font-bold opacity-60">Price per kg</span>
                   <span className="font-black">Rs. 245.00</span>

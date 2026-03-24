@@ -26,6 +26,7 @@ import {
 import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { AddGradingModal } from "@/components/modals/AddGradingModal";
 
 export default function GradingPage() {
@@ -76,14 +77,12 @@ export default function GradingPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        {/* Left: Summary Metrics */}
         <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
            <KPICard title="Grade A Yield" value={`${((totalA/total)*100).toFixed(1)}%`} subtitle={`${totalA.toLocaleString()} kg total`} icon={TrendingUp} />
            <KPICard title="Grade B Yield" value={`${((totalB/total)*100).toFixed(1)}%`} subtitle={`${totalB.toLocaleString()} kg total`} icon={LayoutGrid} iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none" />
            <KPICard title="Grade C Yield" value={`${((totalC/total)*100).toFixed(1)}%`} subtitle={`${totalC.toLocaleString()} kg total`} icon={Box} iconClassName="bg-warning/10 text-warning border-warning/20 shadow-none" />
         </div>
 
-        {/* Right: Visual Distribution */}
         <div className="lg:col-span-4">
            <GlassCard className="h-full flex flex-col p-6 items-center justify-center">
               <div className="w-full flex items-center justify-between mb-6">
@@ -126,29 +125,42 @@ export default function GradingPage() {
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Grade A (kg)</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Grade B (kg)</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Grade C (kg)</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Waste (kg)</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Outturn %</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {records.map((record) => (
-                  <TableRow key={record.id} className="group border-b border-border/40 hover:bg-primary/5 transition-all">
-                    <TableCell className="pl-6 py-5 font-black text-sm text-foreground">{record.id}</TableCell>
-                    <TableCell>
-                       <Badge variant="outline" className="text-[10px] font-black border-primary/20 text-primary bg-primary/5">
-                          {record.batchId}
-                       </Badge>
-                    </TableCell>
-                    <TableCell className="text-xs font-bold text-muted-foreground">{record.date}</TableCell>
-                    <TableCell className="text-center font-black text-primary lining-nums">{record.grades.gradeA.toLocaleString()}</TableCell>
-                    <TableCell className="text-center font-black text-blue-500 lining-nums">{record.grades.gradeB.toLocaleString()}</TableCell>
-                    <TableCell className="text-center font-black text-warning lining-nums">{record.grades.gradeC.toLocaleString()}</TableCell>
-                    <TableCell className="text-right pr-6">
-                       <Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                          <MoreVertical className="h-4 w-4" />
-                       </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {records.map((record) => {
+                  const totalGood = record.grades.gradeA + record.grades.gradeB + record.grades.gradeC;
+                  const totalInput = totalGood + record.grades.waste;
+                  const outturn = totalInput > 0 ? (totalGood / totalInput) * 100 : 0;
+                  const isSafe = outturn > 22;
+
+                  return (
+                    <TableRow key={record.id} className="group border-b border-border/40 hover:bg-primary/5 transition-all">
+                      <TableCell className="pl-6 py-5 font-black text-sm text-foreground">{record.id}</TableCell>
+                      <TableCell>
+                         <Badge variant="outline" className="text-[10px] font-black border-primary/20 text-primary bg-primary/5">
+                            {record.batchId}
+                         </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs font-bold text-muted-foreground">{record.date}</TableCell>
+                      <TableCell className="text-center font-black text-primary lining-nums">{record.grades.gradeA.toLocaleString()}</TableCell>
+                      <TableCell className="text-center font-black text-blue-500 lining-nums">{record.grades.gradeB.toLocaleString()}</TableCell>
+                      <TableCell className="text-center font-black text-warning lining-nums">{record.grades.gradeC.toLocaleString()}</TableCell>
+                      <TableCell className="text-center font-black text-destructive lining-nums">{record.grades.waste.toLocaleString()}</TableCell>
+                      <TableCell className={cn("text-center font-black lining-nums", isSafe ? "text-emerald-600" : "text-orange-500")}>
+                        {outturn.toFixed(1)}%
+                      </TableCell>
+                      <TableCell className="text-right pr-6">
+                         <Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 transition-opacity">
+                            <MoreVertical className="h-4 w-4" />
+                         </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>

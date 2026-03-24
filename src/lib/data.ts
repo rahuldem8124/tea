@@ -31,7 +31,7 @@ export const processingBatches: ProcessingBatch[] = [
 ];
 
 export const gradingRecords: GradingRecord[] = [
-  { id: "GR-999", batchId: "BT-1000", grades: { gradeA: 150, gradeB: 100, gradeC: 42 }, date: "2026-03-23" },
+  { id: "GR-999", batchId: "BT-1000", grades: { gradeA: 150, gradeB: 100, gradeC: 42, waste: 8 }, date: "2026-03-23" },
 ];
 
 export const packagingRecords: PackagingRecord[] = [

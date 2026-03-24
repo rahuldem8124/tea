@@ -65,9 +65,10 @@ export interface GradingRecord {
   id: string;
   batchId: string;
   grades: {
-    gradeA: number; // kg
+    gradeA: number;
     gradeB: number;
     gradeC: number;
+    waste: number;
   };
   date: string;
 }
