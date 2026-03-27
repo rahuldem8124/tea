@@ -11,13 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { LeafEntry, QualityGrade } from "@/types";
 import { toast } from "sonner";
 
@@ -27,7 +20,6 @@ interface AddLeafModalProps {
   onAdd: (entry: LeafEntry) => void;
 }
 
-const grades: QualityGrade[] = ["A+", "A", "B", "C"];
 const priceMap: Record<QualityGrade, number> = {
   "A+": 85,
   A: 75,
@@ -57,6 +49,9 @@ export function AddLeafModal({ open, onOpenChange, onAdd }: AddLeafModalProps) {
       qualityGrade,
       pricePerKg: price,
       totalCost: qty * price,
+      paymentStatus: "pending",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     onAdd(entry);
     toast.success(`Entry added for ${farmerName} — ${qty} kg`);

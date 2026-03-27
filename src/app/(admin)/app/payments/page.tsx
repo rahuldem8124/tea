@@ -103,7 +103,7 @@ export default function PaymentManagementPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground pl-1">Amount (LKR)</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground pl-1">Amount (INR)</label>
                     <Input type="number" placeholder="5,000" className="h-12 bg-muted/20 border-border/50 rounded-xl font-bold" />
                   </div>
                   <div className="space-y-2">
@@ -134,7 +134,7 @@ export default function PaymentManagementPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-black tracking-tighter">LKR 4.2M</div>
+            <div className="text-4xl font-black tracking-tighter">₹ 4.2M</div>
             <div className="flex items-center gap-1.5 mt-2 text-emerald-500 font-bold text-xs uppercase tracking-tight">
               <ArrowUpRight className="h-3 w-3" />
               12% vs last month
@@ -149,7 +149,7 @@ export default function PaymentManagementPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-black tracking-tighter">LKR 125,400</div>
+            <div className="text-4xl font-black tracking-tighter">₹ 125,400</div>
             <div className="mt-2 text-muted-foreground font-bold text-xs uppercase tracking-tight">
               For 14 active farmers
             </div>
@@ -163,7 +163,7 @@ export default function PaymentManagementPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-4xl font-black tracking-tighter">LKR 84,000</div>
+            <div className="text-4xl font-black tracking-tighter">₹ 84,000</div>
             <div className="flex items-center gap-1.5 mt-2 text-rose-500 font-bold text-xs uppercase tracking-tight">
               <ArrowDownLeft className="h-3 w-3" />
               -5% deduction rate
@@ -201,7 +201,7 @@ export default function PaymentManagementPage() {
                   <TableHead className="w-[140px] font-black text-[10px] uppercase tracking-widest py-5 pl-8 text-muted-foreground">Date</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Transaction ID</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Farmer Name</TableHead>
-                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Amount (LKR)</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Amount (INR)</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-center">Status</TableHead>
                   <TableHead className="text-right pr-8 font-black text-[10px] uppercase tracking-widest text-muted-foreground">Actions</TableHead>
                 </TableRow>
@@ -247,7 +247,7 @@ export default function PaymentManagementPage() {
                   <TableHead className="w-[140px] font-black text-[10px] uppercase tracking-widest py-5 pl-8 text-muted-foreground">Date</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Invoice ID</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Buyer Entity</TableHead>
-                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Amount (LKR)</TableHead>
+                  <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-right">Amount (INR)</TableHead>
                   <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground text-center">Status</TableHead>
                   <TableHead className="text-right pr-8 font-black text-[10px] uppercase tracking-widest text-muted-foreground">Actions</TableHead>
                 </TableRow>

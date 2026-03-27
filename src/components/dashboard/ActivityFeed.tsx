@@ -39,9 +39,10 @@ const typeConfig: Record<
 
 interface ActivityFeedProps {
   items: ActivityItem[];
+  onItemClick?: (item: ActivityItem) => void;
 }
 
-export function ActivityFeed({ items }: ActivityFeedProps) {
+export function ActivityFeed({ items, onItemClick }: ActivityFeedProps) {
   return (
     <GlassCard className="h-full flex flex-col p-0 overflow-hidden" hoverLift={false}>
       <div className="p-5 border-b border-border/50 flex items-center gap-2">
@@ -66,7 +67,11 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="flex items-start gap-4 relative group"
+                className={cn(
+                  "flex items-start gap-4 relative group",
+                  onItemClick && "cursor-pointer"
+                )}
+                onClick={() => onItemClick?.(item)}
               >
                 <div className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-background border border-border mt-1">
                   <div className={cn("h-2 w-2 rounded-full", config.glow)} />

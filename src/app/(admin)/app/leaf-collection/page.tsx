@@ -8,6 +8,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { QualityBadge } from "@/components/leaf/QualityBadge";
 import { AddLeafModal } from "@/components/leaf/AddLeafModal";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -29,7 +30,6 @@ import { GlassCard } from "@/components/ui/glass-card";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FloatingPanel } from "@/components/ui/floating-panel";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 
 
 const TODAY = new Date().toISOString().split("T")[0];
@@ -47,9 +47,13 @@ export default function LeafCollectionPage() {
 
   const todayEntries = entries.filter((e) => e.date === TODAY);
   const totalTodayKg = todayEntries.reduce((s, e) => s + e.quantityKg, 0);
-  const avgMoisture = todayEntries.length > 0 
-    ? (todayEntries.reduce((s, e) => s + (e.moistureContent ?? 0), 0) / todayEntries.length).toFixed(1)
+  const avgQuality = todayEntries.length > 0 
+    ? (todayEntries.reduce((s, e) => {
+        const gradeMap: Record<string, number> = { "A+": 4, "A": 3, "B": 2, "C": 1 };
+        return s + (gradeMap[e.qualityGrade] || 0);
+      }, 0) / todayEntries.length).toFixed(1)
     : "0.0";
+  const totalCost = todayEntries.reduce((s, e) => s + (e.quantityKg * e.pricePerKg), 0);
 
 
   const filtered = entries.filter((e) => {
@@ -107,23 +111,23 @@ export default function LeafCollectionPage() {
           icon={Leaf}
         />
         <KPICard
-          title="Avg Moisture"
-          value={`${avgMoisture}%`}
-          subtitle="Real-time intake avg"
+          title="Avg Quality Score"
+          value={avgQuality}
+          subtitle="Real-time intake quality"
           icon={Zap}
           iconClassName="bg-blue-500/10 text-blue-500 border-blue-500/20 shadow-none"
         />
         <KPICard
-          title="Active Batches"
-          value={String(todayEntries.length)}
-          subtitle="Pending processing"
+          title="Total Payable"
+          value={`Rs. ${totalCost.toLocaleString()}`}
+          subtitle="Estimated today"
           icon={TrendingUp}
           iconClassName="bg-chart-2/10 text-chart-2 border-chart-2/20 shadow-none"
         />
         <KPICard
-          title="Total Collected"
-          value={`${totalTodayKg.toLocaleString()} kg`}
-          subtitle="Cumulative today"
+          title="Paid Status"
+          value={`${todayEntries.filter(e => e.paymentStatus === 'paid').length} Paid`}
+          subtitle={`${todayEntries.filter(e => e.paymentStatus === 'pending').length} Pending`}
           icon={Leaf}
           iconClassName="bg-success/10 text-success border-success/20 shadow-none"
         />
@@ -167,8 +171,8 @@ export default function LeafCollectionPage() {
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Supplier</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Time</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right h-12">Qty (kg)</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-12">Raw Quality</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Moisture</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-12">Quality</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Payment</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-12">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -213,19 +217,9 @@ export default function LeafCollectionPage() {
                         <QualityBadge grade={entry.qualityGrade} />
                       </TableCell>
                       <TableCell>
-                         <div className="flex items-center gap-2">
-                           <div className="h-1.5 w-12 bg-muted rounded-full overflow-hidden">
-                              <div 
-                                className={cn(
-                                  "h-full transition-all",
-                                  (entry.moistureContent ?? 0) > 72 ? "bg-destructive w-[80%]" : "bg-success w-[40%]"
-                                )} 
-                              />
-                           </div>
-                           <span className={cn("text-[10px] font-bold uppercase tracking-widest", (entry.moistureContent ?? 0) > 72 ? "text-destructive" : "text-success")}>
-                             {entry.moistureContent ?? 0}%
-                           </span>
-                         </div>
+                         <Badge variant={entry.paymentStatus === 'paid' ? 'success' : entry.paymentStatus === 'partial' ? 'warning' : 'secondary'} className="h-6 px-2 text-[9px] font-black uppercase tracking-widest rounded-lg">
+                           {entry.paymentStatus}
+                         </Badge>
                       </TableCell>
                       <TableCell className="text-right pr-6">
                          <Button variant="ghost" size="icon-xs" className="opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
@@ -297,7 +291,8 @@ export default function LeafCollectionPage() {
                     qualityGrade: "A",
                     moistureContent: 68,
                     finePluckingPercentage: 82,
-                    pricePerKg: 245
+                    pricePerKg: 245,
+                    paymentStatus: "pending"
                   };
                   handleAdd(newEntry);
                 }}

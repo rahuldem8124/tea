@@ -44,6 +44,7 @@ export function AddPackagingModal({ open, onOpenChange, onAdd }: AddPackagingMod
       packageType,
       weightPerPackage: Number(weightPerPackage),
       totalPackages: Number(totalPackages),
+      status: "completed",
     };
     onAdd(newRecord);
     onOpenChange(false);

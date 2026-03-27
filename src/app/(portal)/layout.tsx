@@ -1,4 +1,4 @@
-import { ShoppingBag, CreditCard, Box, User } from "lucide-react";
+import { ShoppingBag, Box, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

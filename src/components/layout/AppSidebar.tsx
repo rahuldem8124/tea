@@ -31,21 +31,21 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
 const productionItems = [
-  { label: "Dashboard", href: "/", icon: LayoutDashboard },
-  { label: "Leaf Collection", href: "/leaf-collection", icon: Leaf },
-  { label: "Processing", href: "/processing", icon: Cog },
-  { label: "Grading", href: "/grading", icon: Layers },
-  { label: "Packaging", href: "/packaging", icon: Archive },
+  { label: "Dashboard", href: "/app", icon: LayoutDashboard },
+  { label: "Leaf Collection", href: "/app/leaf-collection", icon: Leaf },
+  { label: "Processing", href: "/app/processing", icon: Cog },
+  { label: "Grading", href: "/app/grading", icon: Layers },
+  { label: "Packaging", href: "/app/packaging", icon: Archive },
 ];
 
 const logisticsItems = [
-  { label: "Logistics", href: "/logistics", icon: Truck },
-  { label: "Godowns", href: "/godowns", icon: Warehouse },
+  { label: "Logistics", href: "/app/logistics", icon: Truck },
+  { label: "Godowns", href: "/app/godowns", icon: Warehouse },
 ];
 
 const adminItems = [
-  { label: "Payments", href: "/payments", icon: Banknote },
-  { label: "Employees", href: "/employees", icon: Users },
+  { label: "Payments", href: "/app/payments", icon: Banknote },
+  { label: "Employees", href: "/app/employees", icon: Users },
 ];
 
 export function AppSidebar() {
@@ -55,7 +55,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-border/50 bg-background/50 backdrop-blur-xl">
       <SidebarHeader className="px-6 py-8">
-        <div className="flex items-center gap-4 overflow-hidden">
+        <div className="flex items-center gap-4 overflow-hidden cursor-pointer" onClick={() => router.push("/")}>
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.3)] glow-green transition-transform hover:scale-105 duration-300">
             <Factory className="h-6 w-6" />
           </div>
@@ -167,8 +167,8 @@ interface NavItemProps {
 
 function NavItem({ item, pathname, router }: NavItemProps) {
   const isActive =
-    item.href === "/"
-      ? pathname === "/"
+    item.href === "/app"
+      ? pathname === "/app"
       : pathname.startsWith(item.href);
 
   return (

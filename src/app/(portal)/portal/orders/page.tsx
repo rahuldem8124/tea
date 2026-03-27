@@ -73,7 +73,7 @@ export default function OrdersPage() {
                       <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">+{order.items.length - 1} more items</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-right font-black">LKR {order.total.toLocaleString()}</TableCell>
+                  <TableCell className="text-right font-black">₹ {order.total.toLocaleString()}</TableCell>
                   <TableCell className="text-center">
                     <Badge variant="outline" className={`${status.color} rounded-lg font-bold text-[10px] uppercase tracking-widest gap-2 py-1 px-3`}>
                       <Icon className="h-3 w-3" />

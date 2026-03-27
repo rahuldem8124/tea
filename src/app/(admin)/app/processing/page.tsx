@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Zap, Play, CheckCircle2, Plus, Search, Filter, ArrowRight, Activity, TrendingDown, Thermometer } from "lucide-react";
+import { Zap, Play, CheckCircle2, Plus, Search, Filter, ArrowRight, Activity, TrendingDown, Clock } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -141,7 +141,8 @@ export default function ProcessingPage() {
                 <TableHead className="w-[120px] font-black text-[10px] uppercase tracking-widest py-4 pl-6 text-muted-foreground">Batch ID</TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Machine</TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Input (kg)</TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Start Time</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Duration</TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Grades (A/B/C)</TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-widest text-muted-foreground">Status</TableHead>
                 <TableHead className="text-right pr-6 font-black text-[10px] uppercase tracking-widest text-muted-foreground">Actions</TableHead>
               </TableRow>
@@ -160,7 +161,16 @@ export default function ProcessingPage() {
                         </div>
                       </TableCell>
                       <TableCell className="font-bold">{batch.inputQtyKg} kg</TableCell>
-                      <TableCell className="text-muted-foreground font-medium">{batch.startTime}</TableCell>
+                      <TableCell className="text-muted-foreground font-medium flex items-center gap-2">
+                         <Clock className="h-3.5 w-3.5 text-primary" />
+                         {batch.duration || "N/A"}
+                      </TableCell>
+                      <TableCell className="font-bold text-xs">
+                         {batch.gradingDistribution 
+                          ? `${batch.gradingDistribution.A} / ${batch.gradingDistribution.B} / ${batch.gradingDistribution.C}`
+                          : "Pending..."
+                         }
+                      </TableCell>
                       <TableCell>
                          <Badge 
                           variant={batch.status === 'processing' ? 'default' : 'secondary'}

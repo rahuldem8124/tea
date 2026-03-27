@@ -109,6 +109,7 @@ export default function PackagingPage() {
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Package Type</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Unit Weight (kg)</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Total Units</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-14">Status</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Total Weight</TableHead>
                 </TableRow>
               </TableHeader>
@@ -131,6 +132,11 @@ export default function PackagingPage() {
                     </TableCell>
                     <TableCell className="text-center font-black text-xs text-foreground lining-nums">{record.weightPerPackage} kg</TableCell>
                     <TableCell className="text-center font-black text-foreground lining-nums">{record.totalPackages}</TableCell>
+                    <TableCell className="text-center">
+                       <Badge variant={record.status === 'completed' ? 'success' : 'secondary'} className="rounded-lg px-2 py-0.5 font-bold text-[9px] uppercase tracking-widest">
+                          {record.status}
+                       </Badge>
+                    </TableCell>
                     <TableCell className="text-right pr-6 font-black text-primary lining-nums">
                        {(record.weightPerPackage * record.totalPackages).toLocaleString()} kg
                     </TableCell>

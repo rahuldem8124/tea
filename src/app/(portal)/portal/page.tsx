@@ -97,7 +97,7 @@ export default function PortalPage() {
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Price per kg</span>
-                    <span className="text-2xl font-black text-primary tracking-tighter">LKR {product.pricePerKg.toLocaleString()}</span>
+                    <span className="text-2xl font-black text-primary tracking-tighter">₹ {product.pricePerKg.toLocaleString()}</span>
                   </div>
                   <Button 
                     onClick={() => addToCart(product.name)}

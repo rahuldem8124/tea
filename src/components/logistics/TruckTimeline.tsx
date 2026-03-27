@@ -17,6 +17,7 @@ interface TruckTimelineProps {
   departureTime?: string;
   expectedArrivalTime?: string;
   actualArrivalTime?: string;
+  duration?: string;
   className?: string;
 }
 
@@ -25,6 +26,7 @@ export function TruckTimeline({
   departureTime, 
   expectedArrivalTime, 
   actualArrivalTime,
+  duration,
   className 
 }: TruckTimelineProps) {
   const isDelayed = status === "delayed";
@@ -85,11 +87,17 @@ export function TruckTimeline({
                 )}
              </div>
              
-             {isDelayed && step.id === "in_transit" && (
+              {isDelayed && step.id === "in_transit" && (
                 <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-destructive text-white text-[9px] font-black px-2 py-0.5 rounded shadow-lg whitespace-nowrap animate-in fade-in slide-in-from-bottom-2">
                   DELAYED
                 </div>
-             )}
+              )}
+
+              {step.id === "delivered" && idx === activeIndex && duration && (
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary/20 text-primary text-[9px] font-black px-2 py-0.5 rounded border border-primary/20 whitespace-nowrap">
+                  TRIP: {duration}
+                </div>
+              )}
           </div>
         );
       })}

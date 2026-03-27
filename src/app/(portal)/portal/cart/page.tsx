@@ -50,7 +50,7 @@ export default function CartPage() {
               <div className="flex-1 space-y-1">
                 <h3 className="font-bold text-lg">{item.name}</h3>
                 <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">{item.grade}</p>
-                <p className="text-primary font-black">LKR {item.pricePerKg.toLocaleString()}</p>
+                <p className="text-primary font-black">₹ {item.pricePerKg.toLocaleString()}</p>
               </div>
 
               <div className="flex items-center gap-3 bg-muted/30 p-1.5 rounded-xl border border-border/50">
@@ -99,15 +99,15 @@ export default function CartPage() {
           <div className="space-y-3">
             <div className="flex justify-between text-sm font-medium">
               <span className="text-muted-foreground">Subtotal</span>
-              <span>LKR {subtotal.toLocaleString()}</span>
+              <span>₹ {subtotal.toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm font-medium">
               <span className="text-muted-foreground">Shipping</span>
-              <span>LKR {shipping.toLocaleString()}</span>
+              <span>₹ {shipping.toLocaleString()}</span>
             </div>
             <div className="pt-4 border-t border-border/50 flex justify-between">
               <span className="text-lg font-bold">Total</span>
-              <span className="text-2xl font-black text-primary tracking-tighter">LKR {total.toLocaleString()}</span>
+              <span className="text-2xl font-black text-primary tracking-tighter">₹ {total.toLocaleString()}</span>
             </div>
           </div>
 

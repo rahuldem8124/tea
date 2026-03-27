@@ -24,6 +24,10 @@ export interface LeafEntry {
   finePluckingPercentage?: number;
   pricePerKg: number;
   totalCost?: number;
+  paymentStatus: "pending" | "paid" | "partial";
+  createdAt?: string;
+  updatedAt?: string;
+  duration?: string;
 }
 
 export interface Machine {
@@ -59,6 +63,20 @@ export interface ProcessingBatch {
   outputQtyKg?: number;
   status: "pending" | "processing" | "completed";
   wastagePercentage?: number;
+  supplier?: string;
+  collectedAt?: string;
+  gradingDistribution?: {
+    A: number;
+    B: number;
+    C: number;
+  };
+  packagingInfo?: {
+    packageType: string;
+    count: number;
+  };
+  duration?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface GradingRecord {
@@ -79,6 +97,7 @@ export interface PackagingRecord {
   packageType: "Bags" | "Boxes";
   weightPerPackage: number; // kg
   totalPackages: number;
+  status: "pending" | "completed";
 }
 
 export type TruckStatus = "loading" | "dispatched" | "in_transit" | "delivered" | "delayed";
@@ -113,6 +132,17 @@ export interface Godown {
   name: string;
   receivedQtyKg: number;
   availableStockKg: number;
+  stockPerGrade: {
+    A: number;
+    B: number;
+    C: number;
+  };
+  recentArrivals: {
+    batchId: string;
+    quantity: number;
+    receivedTime: string;
+  }[];
+  lastUpdated: string;
 }
 
 export interface Alert {
@@ -132,6 +162,7 @@ export interface KPIData {
     C: number;
   };
   trucksInTransit: number;
+  delayedTrucks: number;
   deliveredShipments: number;
 }
 

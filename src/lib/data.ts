@@ -16,9 +16,9 @@ import {
 } from "@/types";
 
 export const leafEntries: LeafEntry[] = [
-  { id: "L001", farmerName: "Kumara Perera", date: "2026-03-23", collectionTime: "08:30 AM", batchId: "BT-1001", quantityKg: 245, qualityGrade: "A+", moistureContent: 68, finePluckingPercentage: 82, pricePerKg: 85 },
-  { id: "L002", farmerName: "Nimal Silva", date: "2026-03-23", collectionTime: "09:15 AM", batchId: "BT-1002", quantityKg: 180, qualityGrade: "A", moistureContent: 72, finePluckingPercentage: 75, pricePerKg: 75 },
-  { id: "L003", farmerName: "Saman Fernando", date: "2026-03-23", collectionTime: "10:00 AM", batchId: "BT-1003", quantityKg: 320, qualityGrade: "B", moistureContent: 75, finePluckingPercentage: 60, pricePerKg: 60 },
+  { id: "L001", farmerName: "Kumara Perera", date: "2026-03-23", collectionTime: "08:30 AM", batchId: "BT-1001", quantityKg: 245, qualityGrade: "A+", moistureContent: 68, finePluckingPercentage: 82, pricePerKg: 85, paymentStatus: "paid" },
+  { id: "L002", farmerName: "Nimal Silva", date: "2026-03-23", collectionTime: "09:15 AM", batchId: "BT-1002", quantityKg: 180, qualityGrade: "A", moistureContent: 72, finePluckingPercentage: 75, pricePerKg: 75, paymentStatus: "paid" },
+  { id: "L003", farmerName: "Saman Fernando", date: "2026-03-23", collectionTime: "10:00 AM", batchId: "BT-1003", quantityKg: 320, qualityGrade: "B", moistureContent: 75, finePluckingPercentage: 60, pricePerKg: 60, paymentStatus: "pending" },
 ];
 
 export const machines: Machine[] = [
@@ -28,8 +28,31 @@ export const machines: Machine[] = [
 ];
 
 export const processingBatches: ProcessingBatch[] = [
-  { id: "BT-1001", machineId: "M002", inputQtyKg: 245, startTime: "11:00 AM", status: "processing" },
-  { id: "BT-1000", machineId: "M004", inputQtyKg: 300, startTime: "09:00 AM", endTime: "10:30 AM", outputQtyKg: 292, status: "completed", wastagePercentage: 2.6 },
+  { 
+    id: "BT-1001", 
+    machineId: "M002", 
+    inputQtyKg: 245, 
+    startTime: "11:00 AM", 
+    status: "processing",
+    supplier: "Kumara Perera",
+    collectedAt: "08:30 AM",
+    duration: "1h 45m so far"
+  },
+  { 
+    id: "BT-1000", 
+    machineId: "M004", 
+    inputQtyKg: 300, 
+    startTime: "09:00 AM", 
+    endTime: "10:30 AM", 
+    outputQtyKg: 292, 
+    status: "completed", 
+    wastagePercentage: 2.6,
+    supplier: "Nimal Silva",
+    collectedAt: "07:15 AM",
+    gradingDistribution: { A: 150, B: 100, C: 42 },
+    packagingInfo: { packageType: "Bags", count: 6 },
+    duration: "1h 30m"
+  },
 ];
 
 export const gradingRecords: GradingRecord[] = [
@@ -37,7 +60,7 @@ export const gradingRecords: GradingRecord[] = [
 ];
 
 export const packagingRecords: PackagingRecord[] = [
-  { id: "PK-999", batchId: "BT-1000", packageType: "Bags", weightPerPackage: 50, totalPackages: 6 },
+  { id: "PK-999", batchId: "BT-1000", packageType: "Bags", weightPerPackage: 50, totalPackages: 6, status: "completed" },
 ];
 
 export const truckDispatches: TruckDispatch[] = [
@@ -83,15 +106,42 @@ export const truckDispatches: TruckDispatch[] = [
 ];
 
 export const godowns: Godown[] = [
-  { id: "GD-01", name: "Colombo Warehouse A", receivedQtyKg: 4500, availableStockKg: 1200 },
-  { id: "GD-02", name: "Galle Hub", receivedQtyKg: 2100, availableStockKg: 850 },
-  { id: "GD-03", name: "Kandy Distribution", receivedQtyKg: 1800, availableStockKg: 1500 },
+  { 
+    id: "GD-01", 
+    name: "Colombo Warehouse A", 
+    receivedQtyKg: 4500, 
+    availableStockKg: 1200,
+    stockPerGrade: { A: 500, B: 400, C: 300 },
+    recentArrivals: [
+      { batchId: "BT-1000", quantity: 150, receivedTime: "04:30 PM" }
+    ],
+    lastUpdated: "15 mins ago"
+  },
+  { 
+    id: "GD-02", 
+    name: "Galle Hub", 
+    receivedQtyKg: 2100, 
+    availableStockKg: 850,
+    stockPerGrade: { A: 300, B: 300, C: 250 },
+    recentArrivals: [],
+    lastUpdated: "45 mins ago"
+  },
+  { 
+    id: "GD-03", 
+    name: "Kandy Distribution", 
+    receivedQtyKg: 1800, 
+    availableStockKg: 1500,
+    stockPerGrade: { A: 700, B: 500, C: 300 },
+    recentArrivals: [],
+    lastUpdated: "10 mins ago"
+  },
 ];
 
 export const alerts: Alert[] = [
   { id: "AL-01", type: "delay", severity: "high", message: "Truck LP-8842 delayed by 45 mins due to traffic", time: "10 min ago" },
-  { id: "AL-02", type: "downtime", severity: "medium", message: "Sorting Vibro showing unusual vibration", time: "1 hr ago" },
-  { id: "AL-03", type: "stock", severity: "low", message: "Godown GD-02 available stock below 1000kg", time: "2 hr ago" },
+  { id: "AL-02", type: "downtime", severity: "high", message: "Rotorvane 1 motor overheating (94°C)", time: "1 hr ago" },
+  { id: "AL-03", type: "stock", severity: "medium", message: "Godown GD-02 (Galle) available stock below 1000kg", time: "2 hr ago" },
+  { id: "AL-04", type: "batch", severity: "medium", message: "Batch BT-1002 pending processing for 4 hours", time: "30 min ago" },
 ];
 
 export const employees: Employee[] = [
@@ -110,6 +160,7 @@ export const kpiData: KPIData = {
   totalProcessed: 11800,
   gradeDistribution: { A: 45, B: 35, C: 20 },
   trucksInTransit: 2,
+  delayedTrucks: 3,
   deliveredShipments: 145,
 };
 

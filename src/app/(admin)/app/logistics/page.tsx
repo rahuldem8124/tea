@@ -208,8 +208,10 @@ export default function LogisticsPage() {
               <TableHeader>
                 <TableRow className="border-b border-border/50 hover:bg-transparent bg-muted/10">
                   <TableHead className="text-[10px] font-black uppercase tracking-widest pl-6 h-14">Truck & Driver</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Batch</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Destination</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Tracking Timeline</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-14">Times</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-14 text-center">Status</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-14">Actions</TableHead>
                 </TableRow>
@@ -235,53 +237,70 @@ export default function LogisticsPage() {
                            </div>
                         </div>
                       </TableCell>
-                      <TableCell>
+                       <TableCell>
+                          <Badge variant="secondary" className="font-mono text-[10px] px-2 py-0.5 rounded-lg border-border/50">
+                             {truck.loadDetails[0]?.batchId || "N/A"}
+                          </Badge>
+                       </TableCell>
+                       <TableCell>
                          <div className="flex items-center gap-2">
                            <MapPin className="h-3 w-3 text-muted-foreground" />
                            <span className="text-xs font-bold text-foreground italic">{truck.destinationGodown}</span>
                          </div>
                       </TableCell>
-                      <TableCell className="min-w-[300px]">
-                         <div className="space-y-2">
-                           <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-muted-foreground px-1">
-                               <span>Factory</span>
-                               <span>Road</span>
-                               <span>Godown</span>
-                           </div>
-                            <div className="relative pt-6 pb-2">
-                               <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden relative border border-border/40">
-                                  <div className={cn("h-full bg-primary transition-all duration-1000", getProgressWidth(truck.status))} />
-                               </div>
-                               <motion.div 
-                                 className="absolute top-0 -translate-y-[15%] z-10 transition-all duration-1000 ease-in-out pointer-events-none"
-                                 initial={false}
-                                 animate={{ 
-                                   left: truck.status === "loading" ? "10%" : 
-                                          truck.status === "dispatched" ? "30%" :
-                                          truck.status === "in_transit" || truck.status === "delayed" ? "65%" : "95%"
-                                 }}
-                               >
-                                 <div className="relative -ml-6">
-                                   <Image 
-                                     src={getTruckImage(truck.status)} 
-                                     alt="truck" 
-                                     width={48} 
-                                     height={24} 
-                                     className="object-contain drop-shadow-lg"
-                                   />
-                                   {(truck.status === "in_transit" || truck.status === "delayed") && (
-                                     <motion.div 
-                                       animate={{ opacity: [0, 1, 0], x: [-5, -15] }}
-                                       transition={{ repeat: Infinity, duration: 1.5 }}
-                                       className="absolute -left-2 top-1/2 -translate-y-1/2 h-0.5 w-3 bg-primary/40 rounded-full"
-                                     />
-                                   )}
+                       <TableCell className="min-w-[280px]">
+                          <div className="space-y-2">
+                             <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-widest text-muted-foreground px-1">
+                                 <span>Factory</span>
+                                 <span>Road</span>
+                                 <span>Godown</span>
+                             </div>
+                              <div className="relative pt-6 pb-2">
+                                 <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden relative border border-border/40">
+                                    <div className={cn("h-full bg-primary transition-all duration-1000", getProgressWidth(truck.status))} />
                                  </div>
-                               </motion.div>
-                            </div>
-                         </div>
-                      </TableCell>
-                      <TableCell className="text-center">
+                                 <motion.div 
+                                   className="absolute top-0 -translate-y-[15%] z-10 transition-all duration-1000 ease-in-out pointer-events-none"
+                                   initial={false}
+                                   animate={{ 
+                                     left: truck.status === "loading" ? "10%" : 
+                                            truck.status === "dispatched" ? "30%" :
+                                            truck.status === "in_transit" || truck.status === "delayed" ? "65%" : "95%"
+                                   }}
+                                 >
+                                   <div className="relative -ml-6">
+                                     <Image 
+                                       src={getTruckImage(truck.status)} 
+                                       alt="truck" 
+                                       width={48} 
+                                       height={24} 
+                                       className="object-contain drop-shadow-lg"
+                                     />
+                                     {(truck.status === "in_transit" || truck.status === "delayed") && (
+                                       <motion.div 
+                                         animate={{ opacity: [0, 1, 0], x: [-5, -15] }}
+                                         transition={{ repeat: Infinity, duration: 1.5 }}
+                                         className="absolute -left-2 top-1/2 -translate-y-1/2 h-0.5 w-3 bg-primary/40 rounded-full"
+                                       />
+                                     )}
+                                   </div>
+                                 </motion.div>
+                              </div>
+                          </div>
+                       </TableCell>
+                       <TableCell>
+                          <div className="flex flex-col gap-1 min-w-[100px]">
+                             <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                <span>DEP: {truck.departureTime}</span>
+                             </div>
+                             <div className="flex items-center gap-2 text-[10px] font-black text-foreground">
+                                <Clock className="h-3 w-3 text-primary" />
+                                <span>ETA: {truck.estimatedArrivalTime}</span>
+                             </div>
+                          </div>
+                       </TableCell>
+                       <TableCell className="text-center">
                          <div className="flex flex-col items-center gap-1">
                             <Badge variant="outline" className={cn("text-[9px] font-black px-2 py-0.5 uppercase tracking-widest", getStatusColor(truck.status))}>
                                 {truck.status.replace('_', ' ')}
