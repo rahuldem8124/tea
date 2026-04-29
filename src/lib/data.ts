@@ -16,9 +16,11 @@ import {
 } from "@/types";
 
 export const leafEntries: LeafEntry[] = [
-  { id: "L001", farmerName: "Kumara Perera", date: "2026-03-23", collectionTime: "08:30 AM", batchId: "BT-1001", quantityKg: 245, qualityGrade: "A+", moistureContent: 68, finePluckingPercentage: 82, pricePerKg: 85, paymentStatus: "paid" },
-  { id: "L002", farmerName: "Nimal Silva", date: "2026-03-23", collectionTime: "09:15 AM", batchId: "BT-1002", quantityKg: 180, qualityGrade: "A", moistureContent: 72, finePluckingPercentage: 75, pricePerKg: 75, paymentStatus: "paid" },
-  { id: "L003", farmerName: "Saman Fernando", date: "2026-03-23", collectionTime: "10:00 AM", batchId: "BT-1003", quantityKg: 320, qualityGrade: "B", moistureContent: 75, finePluckingPercentage: 60, pricePerKg: 60, paymentStatus: "pending" },
+  { id: "L001", farmerName: "Suresh Kumar", date: new Date().toISOString().split("T")[0], collectionTime: "08:00 AM", batchId: "BT-1001", quantityKg: 320, qualityGrade: "A+", moistureContent: 68, finePluckingPercentage: 82, pricePerKg: 85, paymentStatus: "paid", status: "Processed" },
+  { id: "L002", farmerName: "Rajan Nair", date: new Date().toISOString().split("T")[0], collectionTime: "09:30 AM", batchId: "BT-1002", quantityKg: 280, qualityGrade: "A", moistureContent: 72, finePluckingPercentage: 75, pricePerKg: 75, paymentStatus: "pending", status: "Pending" },
+  { id: "L003", farmerName: "Murugan S.", date: new Date().toISOString().split("T")[0], collectionTime: "10:00 AM", batchId: "BT-1003", quantityKg: 410, qualityGrade: "B", moistureContent: 75, finePluckingPercentage: 60, pricePerKg: 60, paymentStatus: "pending", status: "In Processing" },
+  { id: "L004", farmerName: "Lakshmi Devi", date: new Date().toISOString().split("T")[0], collectionTime: "11:15 AM", batchId: "BT-1004", quantityKg: 195, qualityGrade: "A+", moistureContent: 69, finePluckingPercentage: 80, pricePerKg: 85, paymentStatus: "paid", status: "Collected" },
+  { id: "L005", farmerName: "Anil Verma", date: new Date().toISOString().split("T")[0], collectionTime: "12:00 PM", batchId: "BT-1005", quantityKg: 240, qualityGrade: "B", moistureContent: 73, finePluckingPercentage: 65, pricePerKg: 60, paymentStatus: "paid", status: "Collected" },
 ];
 
 export const machines: Machine[] = [
@@ -64,45 +66,11 @@ export const packagingRecords: PackagingRecord[] = [
 ];
 
 export const truckDispatches: TruckDispatch[] = [
-  { 
-    id: "TR-501", 
-    truckId: "LP-8842", 
-    driverName: "Sunil Shantha", 
-    destinationGodown: "Colombo Warehouse A", 
-    loadDetails: [{ batchId: "BT-1000", grade: "Grade A", quantity: 150 }], 
-    departureTime: "02:00 PM", 
-    estimatedArrivalTime: "06:00 PM", 
-    status: "in_transit",
-    tripHistory: [
-      { tripId: "T-101", destination: "Colombo", departureTime: "08:00 AM", arrivalTime: "12:00 PM", status: "on-time" },
-      { tripId: "T-098", destination: "Negombo", departureTime: "10:00 AM", arrivalTime: "02:30 PM", status: "delayed" }
-    ]
-  },
-  { 
-    id: "TR-502", 
-    truckId: "LP-9910", 
-    driverName: "Rajiva Silva", 
-    destinationGodown: "Kandy Distribution", 
-    loadDetails: [{ batchId: "BT-1001", grade: "Grade A", quantity: 300 }], 
-    departureTime: "09:00 AM", 
-    estimatedArrivalTime: "11:30 AM", 
-    status: "delayed",
-    tripHistory: []
-  },
-  { 
-    id: "TR-500", 
-    truckId: "LP-1290", 
-    driverName: "Nuwan Kumara", 
-    destinationGodown: "Galle Hub", 
-    loadDetails: [{ batchId: "BT-999", grade: "Grade B", quantity: 200 }], 
-    departureTime: "08:00 AM", 
-    estimatedArrivalTime: "11:00 AM", 
-    actualArrivalTime: "10:45 AM",
-    status: "delivered",
-    tripHistory: [
-      { tripId: "T-100", destination: "Galle", departureTime: "08:00 AM", arrivalTime: "11:00 AM", status: "on-time" }
-    ]
-  },
+  { id: "TR-501", truckId: "LP-8842", driverName: "Manoj R.", destinationGodown: "Colombo", loadDetails: [], departureTime: "08:00 AM", estimatedArrivalTime: "+45 mins", status: "delayed" },
+  { id: "TR-502", truckId: "LP-9012", driverName: "Sunil K.", destinationGodown: "Kochi", loadDetails: [], departureTime: "09:00 AM", estimatedArrivalTime: "On time", status: "in_transit" },
+  { id: "TR-503", truckId: "LP-7731", driverName: "Pradeep M.", destinationGodown: "Chennai", loadDetails: [], departureTime: "10:00 AM", estimatedArrivalTime: "On time", status: "in_transit" },
+  { id: "TR-504", truckId: "LP-6623", driverName: "Vikram S.", destinationGodown: "Munnar", loadDetails: [], departureTime: "07:00 AM", estimatedArrivalTime: "—", status: "delivered" },
+  { id: "TR-505", truckId: "LP-5510", driverName: "Ravi T.", destinationGodown: "Coimbatore", loadDetails: [], departureTime: "12:00 PM", estimatedArrivalTime: "3:00 PM", status: "dispatched" },
 ];
 
 export const godowns: Godown[] = [
@@ -138,10 +106,10 @@ export const godowns: Godown[] = [
 ];
 
 export const alerts: Alert[] = [
-  { id: "AL-01", type: "delay", severity: "high", message: "Truck LP-8842 delayed by 45 mins due to traffic", time: "10 min ago" },
   { id: "AL-02", type: "downtime", severity: "high", message: "Rotorvane 1 motor overheating (94°C)", time: "1 hr ago" },
-  { id: "AL-03", type: "stock", severity: "medium", message: "Godown GD-02 (Galle) available stock below 1000kg", time: "2 hr ago" },
-  { id: "AL-04", type: "batch", severity: "medium", message: "Batch BT-1002 pending processing for 4 hours", time: "30 min ago" },
+  { id: "AL-01", type: "delay", severity: "medium", message: "Truck LP-8842 delayed by 45 mins due to traffic", time: "10 min ago" },
+  { id: "AL-03", type: "stock", severity: "low", message: "Godown GD-02 (Galle) available stock below 1000kg", time: "2 hr ago" },
+  { id: "AL-04", type: "batch", severity: "low", message: "Batch BT-1002 pending processing for 4 hours", time: "30 min ago" },
 ];
 
 export const employees: Employee[] = [
@@ -165,13 +133,20 @@ export const kpiData: KPIData = {
 };
 
 export const dailyChartData: ChartDataPoint[] = [
-  { date: "Mar 17", collection: 1320, processed: 1280, dispatched: 1200 },
-  { date: "Mar 18", collection: 1050, processed: 1000, dispatched: 950 },
-  { date: "Mar 19", collection: 1480, processed: 1400, dispatched: 1350 },
-  { date: "Mar 20", collection: 980, processed: 950, dispatched: 900 },
-  { date: "Mar 21", collection: 1150, processed: 1100, dispatched: 1050 },
-  { date: "Mar 22", collection: 870, processed: 840, dispatched: 800 },
-  { date: "Mar 23", collection: 745, processed: 700, dispatched: 650 },
+  { date: "Mon", collection: 1100, processed: 870, dispatched: 0 },
+  { date: "Tue", collection: 980, processed: 760, dispatched: 0 },
+  { date: "Wed", collection: 1340, processed: 1050, dispatched: 0 },
+  { date: "Thu", collection: 1200, processed: 940, dispatched: 0 },
+  { date: "Fri", collection: 1450, processed: 1120, dispatched: 0 },
+  { date: "Sat", collection: 890, processed: 700, dispatched: 0 },
+  { date: "Sun", collection: 760, processed: 600, dispatched: 0 },
+];
+
+export const revenueChartData = [
+  { week: "Week 1", revenue: 1.2 },
+  { week: "Week 2", revenue: 1.5 },
+  { week: "Week 3", revenue: 1.1 },
+  { week: "Week 4", revenue: 1.8 },
 ];
 
 export const portalProducts: PortalProduct[] = [

@@ -7,32 +7,25 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Cell } from "recharts";
-import { ChartDataPoint } from "@/types";
 import { Box } from "lucide-react";
 
 interface ProfitChartProps {
-  data: ChartDataPoint[];
+  data: any[];
 }
 
 const chartConfig = {
-  dispatched: { label: "Dispatched (kg)", color: "var(--color-chart-1)" },
+  revenue: { label: "Revenue (Lakhs)", color: "var(--success)" },
 };
 
 export function ProfitChart({ data }: ProfitChartProps) {
   return (
-    <Card className="border border-border/60 shadow-none">
-      <CardHeader className="pb-3 flex flex-row items-center gap-2">
-        <Box className="h-4 w-4 text-primary" />
-        <CardTitle className="text-base font-semibold">
-          Dispatch Volume
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="w-full h-[220px]">
-          <BarChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+    <Card className="border border-border/60 shadow-none h-full bg-transparent">
+      <CardContent className="p-0">
+        <ChartContainer config={chartConfig} className="w-full h-[320px]">
+          <BarChart data={data} margin={{ top: 20, right: 10, bottom: 20, left: -20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey="week"
               tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
               axisLine={false}
               tickLine={false}
@@ -42,19 +35,15 @@ export function ProfitChart({ data }: ProfitChartProps) {
               tick={{ fontSize: 11, fill: "var(--color-muted-foreground)" }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `${v}`}
+              tickFormatter={(v) => `₹${v}L`}
             />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="dispatched" radius={[4, 4, 0, 0]}>
+            <ChartTooltip content={<ChartTooltipContent formatter={(value) => `₹${value}L`} />} />
+            <Bar dataKey="revenue" radius={[4, 4, 0, 0]}>
               {data.map((_, i) => (
                 <Cell
                   key={i}
-                  fill={
-                    i === data.length - 1
-                      ? "var(--color-chart-2)"
-                      : "var(--color-chart-1)"
-                  }
-                  fillOpacity={i === data.length - 1 ? 0.7 : 1}
+                  fill="var(--success)"
+                  fillOpacity={1}
                 />
               ))}
             </Bar>

@@ -25,6 +25,7 @@ export interface LeafEntry {
   pricePerKg: number;
   totalCost?: number;
   paymentStatus: "pending" | "paid" | "partial";
+  status?: string;
   createdAt?: string;
   updatedAt?: string;
   duration?: string;

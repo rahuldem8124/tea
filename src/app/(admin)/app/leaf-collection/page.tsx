@@ -172,7 +172,7 @@ export default function LeafCollectionPage() {
                   <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Time</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right h-12">Qty (kg)</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-center h-12">Quality</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Payment</TableHead>
+                  <TableHead className="text-[10px] font-black uppercase tracking-widest h-12">Status</TableHead>
                   <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6 h-12">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -217,8 +217,8 @@ export default function LeafCollectionPage() {
                         <QualityBadge grade={entry.qualityGrade} />
                       </TableCell>
                       <TableCell>
-                         <Badge variant={entry.paymentStatus === 'paid' ? 'success' : entry.paymentStatus === 'partial' ? 'warning' : 'secondary'} className="h-6 px-2 text-[9px] font-black uppercase tracking-widest rounded-lg">
-                           {entry.paymentStatus}
+                         <Badge variant={entry.status === 'Processed' ? 'success' : entry.status === 'In Processing' ? 'warning' : 'secondary'} className="h-6 px-2 text-[9px] font-black uppercase tracking-widest rounded-lg">
+                           {entry.status || entry.paymentStatus}
                          </Badge>
                       </TableCell>
                       <TableCell className="text-right pr-6">

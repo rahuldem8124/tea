@@ -19,9 +19,9 @@ export default function PublicLayout({
           </div>
           <p>© 2026 Tea Tech Operations. All rights reserved.</p>
           <div className="flex items-center gap-6">
-             <a href="#" className="hover:text-primary transition-colors">Twitter</a>
-             <a href="#" className="hover:text-primary transition-colors">LinkedIn</a>
-             <a href="#" className="hover:text-primary transition-colors">Status</a>
+             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Twitter</a>
+             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">LinkedIn</a>
+             <a href="https://status.teatech.app" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">Status</a>
           </div>
         </div>
       </footer>

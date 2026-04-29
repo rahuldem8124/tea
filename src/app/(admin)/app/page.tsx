@@ -5,7 +5,7 @@ import { KPICard } from "@/components/dashboard/KPICard";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { CollectionSalesChart } from "@/components/dashboard/CollectionSalesChart";
 import { ProfitChart } from "@/components/dashboard/ProfitChart";
-import { kpiData, recentActivity, dailyChartData, alerts } from "@/lib/data";
+import { kpiData, recentActivity, dailyChartData, revenueChartData, alerts } from "@/lib/data";
 import {
   TrendingUp,
   Leaf,
@@ -29,7 +29,6 @@ import { cn } from "@/lib/utils";
 
 import { ProcessPipeline } from "@/components/dashboard/ProcessPipeline";
 import { BatchTraceabilityPanel } from "@/components/dashboard/BatchTraceabilityPanel";
-import { DailySummaryPanel } from "@/components/dashboard/DailySummaryPanel";
 
 
 
@@ -37,6 +36,7 @@ export default function DashboardPage() {
   const [isAlertsOpen, setIsAlertsOpen] = React.useState(true);
   const [selectedBatchId, setSelectedBatchId] = React.useState<string | null>(null);
   const [isBatchPanelOpen, setIsBatchPanelOpen] = React.useState(false);
+  const [isReportModalOpen, setIsReportModalOpen] = React.useState(false);
 
   const handleOpenBatch = (batchId: string) => {
     setSelectedBatchId(batchId);
@@ -70,15 +70,13 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3 bg-muted/30 p-1.5 rounded-2xl border border-border/50 backdrop-blur-sm shadow-sm self-start">
           <Button variant="ghost" size="sm" className="rounded-xl h-9 px-4 font-bold text-xs gap-2">
             <Calendar className="h-4 w-4" />
-            March 21, 2026
+            {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
           </Button>
-          <Button variant="default" size="sm" className="rounded-xl h-9 px-4 font-bold text-xs glow-green">
+          <Button variant="default" size="sm" className="rounded-xl h-9 px-4 font-bold text-xs glow-green" onClick={() => setIsReportModalOpen(true)}>
             Generate Report
           </Button>
         </div>
       </div>
-
-      <DailySummaryPanel />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Main Content Area */}
@@ -160,7 +158,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="p-2 h-[340px]">
-                <ProfitChart data={dailyChartData} />
+                <ProfitChart data={revenueChartData} />
               </div>
             </GlassCard>
           </div>
@@ -178,14 +176,23 @@ export default function DashboardPage() {
               />
             </div>
             <div className="xl:col-span-1">
-               <GlassCard className="h-full flex flex-col p-6 space-y-6">
-                 <div>
-                    <h4 className="font-bold mb-1 tracking-tight">Quick Insight</h4>
-                    <p className="text-xs text-muted-foreground font-medium leading-relaxed">
-                      Production is 12% higher than last Tuesday. Recommended to increase sorting staff for the evening shift.
+               <GlassCard className="h-full flex flex-col p-6 space-y-6 border-l-4 border-l-success bg-success/5 shadow-[0_0_30px_rgba(34,197,94,0.1)] relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 rotate-12 transition-transform duration-500 group-hover:scale-110">
+                    <Zap className="h-32 w-32 text-success" />
+                 </div>
+                 <div className="relative z-10">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-success/80 mb-1">AI Insight</p>
+                    <h4 className="font-bold mb-3 tracking-tight flex items-center gap-2 text-foreground">
+                       <div className="h-6 w-6 rounded-full bg-success/20 flex items-center justify-center text-success border border-success/30">
+                          <ArrowRight className="h-3.5 w-3.5 -rotate-45" />
+                       </div>
+                       Quick Insight
+                    </h4>
+                    <p className="text-sm text-foreground/90 font-medium leading-relaxed bg-background/40 p-4 rounded-xl border border-success/10">
+                      Production is <span className="text-success font-black">12% higher</span> than last Tuesday. Recommended to increase sorting staff for the evening shift.
                     </p>
                  </div>
-                 <div className="pt-4 border-t border-border/50">
+                 <div className="pt-4 border-t border-success/20 relative z-10 mt-auto">
                     <div className="flex items-center justify-between mb-2">
                        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Energy Efficiency</span>
                        <span className="text-xs font-bold text-success">94%</span>
@@ -303,6 +310,50 @@ export default function DashboardPage() {
         isOpen={isBatchPanelOpen} 
         onClose={() => setIsBatchPanelOpen(false)} 
       />
+
+      <AnimatePresence>
+        {isReportModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }} 
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+              onClick={() => setIsReportModalOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-lg z-10 p-6"
+            >
+              <GlassCard className="p-8 border-primary/30 shadow-2xl space-y-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-xl font-black">Batch Summary Report</h3>
+                    <p className="text-sm text-muted-foreground">{new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={() => setIsReportModalOpen(false)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-4 bg-muted/20 rounded-xl p-4 border border-border/50">
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Leaf Collected:</span> <span className="font-bold">1,245 kg</span></div>
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Processed:</span> <span className="font-bold">840 kg</span></div>
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Outturn:</span> <span className="font-bold text-primary">22.4%</span></div>
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Grade A Output:</span> <span className="font-bold text-success">45%</span></div>
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Trucks Dispatched:</span> <span className="font-bold">8</span></div>
+                   <div className="flex justify-between text-sm"><span className="text-muted-foreground">Alerts Raised:</span> <span className="font-bold text-destructive">4</span></div>
+                </div>
+                <Button className="w-full h-12 text-base font-bold rounded-xl glow-green" onClick={() => window.print()}>
+                  Download PDF
+                </Button>
+              </GlassCard>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
     </motion.div>
   );
 }
